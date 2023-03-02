@@ -51,9 +51,10 @@ class RBNode:
 
         #We are a left child
 
-        #attach my right child to my parent's left
-        self.parent.left = self.right
-        self.right.parent = self.parent
+        #attach my left child to my parent's right
+        self.parent.right = self.left
+        if (self.left != None):
+            self.left.parent = self.parent
 
         #Keep Reference
         originalParent = self.parent
@@ -69,16 +70,17 @@ class RBNode:
         self.parent = grandparent;
             
         #Strstructure my now empty right node to be my original parent
-        self.right = originalParent
+        self.left = originalParent
         originalParent.parent = self;
 
     def rotate_left(self):
         
         #We are a right child
 
-        #attach my left child to my parents right
-        self.parent.right = self.left
-        self.left.parent = self.d
+        #attach my right child to my parents left
+        self.parent.left = self.right
+        if (self.right != None):
+            self.right.parent = self.parent
 
         #Keep Reference
         originalParent = self.parent
@@ -159,11 +161,43 @@ class RBTree:
             if (redUncle):
                 node.parent.make_black()
                 node.parent.parent.make_red()
-                node.uncle.make_black()
+                node.get_uncle().make_black()
+
+                node = node.parent.parent
 
             #Rotate
             else:
-                pass
+
+                # Check if it is a line or triangle rotation
+                leftChild = node.is_left_child()
+                lineRotation = leftChild == node.parent.is_left_child()
+
+
+                if (lineRotation):
+
+                    #Rotate Grand Parent
+                    if (leftChild):
+                        node.parent.parent.rotate_right()
+                    else:
+                        node.parent.parent.rotate_left()
+
+                    # Recolour!!
+                    # These are the new references
+                    node.parent.make_black()
+                    node.brother().make_red()
+
+                #Triangle
+                else:
+
+                    #Rotate Parent
+                    prevParent = node.parent
+                    if (leftChild):
+                        prevParent.rotate_right()
+                    else:
+                        prevParent.rotate_left()
+
+                    #Continue Self, Retest
+
 
         #Ensure Black Root (subsequent black nodes allowed)
         self.root.make_black()
@@ -182,3 +216,14 @@ class RBTree:
         if node.right == None:
             return "[" +  self.__str_helper(node.left) + " <- " + str(node) + "]"
         return "[" + self.__str_helper(node.left) + " <- " + str(node) + " -> " + self.__str_helper(node.right) + "]"
+
+#
+#
+#
+
+t = RBTree()
+insertions = [3, 1, 5, 7, 6]
+
+for insertion in insertions:
+    t.insert(insertion)
+    print(t)
