@@ -11,9 +11,13 @@ class RBNode:
         return self.left == None and self.right == None
 
     def is_left_child(self):
+        if (self.parent == None):
+            return False
         return self == self.parent.left
 
     def is_right_child(self):
+        if (self.parent == None):
+            return False
         return not self.is_left_child()
 
     def is_red(self):
@@ -49,51 +53,53 @@ class RBNode:
 
     def rotate_right(self):
 
-        #We are a left child
+        leftsRight = self.left.right
+        wasLeft = self.is_left_child()
+        isRoot = self.parent == None
+        oldParent = self.parent
 
-        #attach my left child to my parent's right
-        self.parent.right = self.left
-        if (self.left != None):
-            self.left.parent = self.parent
-
-        # I am now decoupled from the tree
-
-        #Get what needs to be moved
-        leftsRight = None
-        if self.left != None:
-            leftsRight = self.left.right
-
-        #Put me Below my Left Child Now
-        self.left.right = self;
-        self.parent = self.left;
-    
-        #Move Subtree below me
+        #Put Self Under Right of Left Child
+        self.parent = self.left
+        self.parent.right = self
+        
+        #Give me child I replaced
         self.left = leftsRight
         if (leftsRight != None):
-            leftsRight.parent = self
+            leftsRight.parent = self;
+
+        #Attach Parent to Old Parent In Same Spot
+        self.parent.parent = oldParent
+        if (not isRoot):
+            if (wasLeft):
+                oldParent.left = self.parent
+            else:
+                oldParent.right = self.parent
+
+
 
     def rotate_left(self):
         
-        self.parent.right = self.right
-        if (self.right != None):
-            self.right.parent = self.parent
+        rightsLeft = self.right.left
+        isRoot = self.parent == None
+        wasLeft = self.is_left_child()
+        oldParent = self.parent
 
-         # I am now decoupled from the tree
-
-        #Get what needs to be moved
-        rightsLeft = None
-        if self.right != None:
-            rightsLeft = self.right.left
-
-        #Put me Below my Left Child Now
-        self.right.left = self;
-        self.parent = self.right;
-    
-        #Move Subtree below me
+        #Put Self Under Right of Left Child
+        self.parent = self.right
+        self.parent.left = self
+        
+        #Give me child I replaced
         self.right = rightsLeft
         if (rightsLeft != None):
-            rightsLeft.parent = self
+            rightsLeft.parent = self;
 
+        #Attach Parent to Old Parent In Same Spot
+        self.parent.parent = oldParent
+        if (not isRoot):
+            if (wasLeft):
+                oldParent.left = self.parent
+            else:
+                oldParent.right = self.parent
 
 class RBTree:
 
@@ -136,6 +142,10 @@ class RBTree:
             else:
                 self.__insert(node.right, value)
 
+    def update_root(self):
+        if (self.root.parent != None):
+            self.root = self.root.parent
+
     def fix(self, node):
         #You may alter code in this method if you wish, it's merely a guide.
         if node.parent == None:
@@ -175,6 +185,9 @@ class RBTree:
                     else:
                         node.parent.parent.rotate_left()
 
+                    #Update Root If Necessary
+                    self.update_root()
+
                     # Recolour!!
                     # These are the new references
                     node.parent.make_black()
@@ -200,9 +213,8 @@ class RBTree:
                         #if (grandparent != None):
                             #node.rotate_right()
 
-
+                    self.update_root()
                     #Continue Self, Retest
-
 
         #Ensure Black Root (subsequent black nodes allowed)
         self.root.make_black()
