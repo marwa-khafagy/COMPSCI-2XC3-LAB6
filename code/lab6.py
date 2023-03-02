@@ -56,49 +56,43 @@ class RBNode:
         if (self.left != None):
             self.left.parent = self.parent
 
-        #Keep Reference
-        originalParent = self.parent
-        grandparent = self.parent.parent
+        # I am now decoupled from the tree
 
-        #I still have my reference
+        #Get what needs to be moved
+        leftsRight = None
+        if self.left != None:
+            leftsRight = self.left.right
 
-        #Update Grandparent
-        if (originalParent.is_left_child()):
-            grandparent.left = self;
-        if (originalParent.is_right_child()):
-            grandparent.right = self;
-        self.parent = grandparent;
-            
-        #Strstructure my now empty right node to be my original parent
-        self.left = originalParent
-        originalParent.parent = self;
+        #Put me Below my Left Child Now
+        self.left.right = self;
+        self.parent = self.left;
+    
+        #Move Subtree below me
+        self.left = leftsRight
+        if (leftsRight != None):
+            leftsRight.parent = self
 
     def rotate_left(self):
         
-        #We are a right child
-
-        #attach my right child to my parents left
-        self.parent.left = self.right
+        self.parent.right = self.right
         if (self.right != None):
             self.right.parent = self.parent
 
-        #Keep Reference
-        originalParent = self.parent
-        grandparent = self.parent.parent
+         # I am now decoupled from the tree
 
-        #I still have my reference
+        #Get what needs to be moved
+        rightsLeft = None
+        if self.right != None:
+            rightsLeft = self.right.left
 
-        #Update Grandparent
-        if (originalParent.is_left_child()):
-            grandparent.left = self;
-        if (originalParent.is_right_child()):
-            grandparent.right = self;
-        self.parent = grandparent;
-            
-        #Restructure my now empty left node to be my original parent
-        self.right = originalParent
-        originalParent.parent = self;
-
+        #Put me Below my Left Child Now
+        self.right.left = self;
+        self.parent = self.right;
+    
+        #Move Subtree below me
+        self.right = rightsLeft
+        if (rightsLeft != None):
+            rightsLeft.parent = self
 
 
 class RBTree:
@@ -184,7 +178,8 @@ class RBTree:
                     # Recolour!!
                     # These are the new references
                     node.parent.make_black()
-                    node.brother().make_red()
+                    if (node.get_brother() != None):
+                        node.get_brother().make_red()
 
                 #Triangle
                 else:
@@ -193,8 +188,18 @@ class RBTree:
                     prevParent = node.parent
                     if (leftChild):
                         prevParent.rotate_right()
+                        node.parent.rotate_left() #new parent
+
+                        node.make_black()
+                        node.left.make_red()
+                        node.right.make_red()
                     else:
                         prevParent.rotate_left()
+                        node.rotate_right()
+                        
+                        #if (grandparent != None):
+                            #node.rotate_right()
+
 
                     #Continue Self, Retest
 
@@ -222,8 +227,15 @@ class RBTree:
 #
 
 t = RBTree()
-insertions = [3, 1, 5, 7, 6]
+insertions = [3, 1, 5, 7, 6, 8, 9, 10]
 
 for insertion in insertions:
+
+
+    if (insertion == insertions[-1]):
+        hi = 0
     t.insert(insertion)
+
     print(t)
+
+pass
