@@ -48,12 +48,54 @@ class RBNode:
          return "(" + str(self.value) + "," + self.colour + ")"
 
     def rotate_right(self):
-        #TODO
-        pass
+
+        #We are a left child
+
+        #attach my right child to my parent's left
+        self.parent.left = self.right
+        self.right.parent = self.parent
+
+        #Keep Reference
+        originalParent = self.parent
+        grandparent = self.parent.parent
+
+        #I still have my reference
+
+        #Update Grandparent
+        if (originalParent.is_left_child()):
+            grandparent.left = self;
+        if (originalParent.is_right_child()):
+            grandparent.right = self;
+        self.parent = grandparent;
+            
+        #Strstructure my now empty right node to be my original parent
+        self.right = originalParent
+        originalParent.parent = self;
 
     def rotate_left(self):
-        #TODO
-        pass
+        
+        #We are a right child
+
+        #attach my left child to my parents right
+        self.parent.right = self.left
+        self.left.parent = self.d
+
+        #Keep Reference
+        originalParent = self.parent
+        grandparent = self.parent.parent
+
+        #I still have my reference
+
+        #Update Grandparent
+        if (originalParent.is_left_child()):
+            grandparent.left = self;
+        if (originalParent.is_right_child()):
+            grandparent.right = self;
+        self.parent = grandparent;
+            
+        #Restructure my now empty left node to be my original parent
+        self.right = originalParent
+        originalParent.parent = self;
 
 
 
@@ -102,9 +144,28 @@ class RBTree:
         #You may alter code in this method if you wish, it's merely a guide.
         if node.parent == None:
             node.make_black()
+
         while node != None and node.parent != None and node.parent.is_red(): 
-            #TODO
-            pass
+            
+            #We insert nodes as red, therefor parent is red
+
+            #Get Uncle Redness
+            uncle = node.get_uncle()
+            redUncle = False
+            if uncle != None:
+                redUncle = uncle.is_red()
+
+            #Perform Color flip
+            if (redUncle):
+                node.parent.make_black()
+                node.parent.parent.make_red()
+                node.uncle.make_black()
+
+            #Rotate
+            else:
+                pass
+
+        #Ensure Black Root (subsequent black nodes allowed)
         self.root.make_black()
                     
         
