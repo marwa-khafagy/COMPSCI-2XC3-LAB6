@@ -15,13 +15,13 @@ class Node:
 class BST:
     def __init__(self):
         self.root = None
-        self.height = 0
+        self.count = 0
     
     def is_empty(self):
-        return self.height == 0
+        return self.count == 0
     
-    def add(self, value):
-        if self.height == 0:
+    def insert(self, value):
+        if self.count == 0:
             self.root = Node(value)
         else:
             temp = self.root
@@ -39,9 +39,10 @@ class BST:
                     else:
                         temp = temp.left
 
+        self.count += 1
 
-    def get_height(self):
-        return self.height
+    def get_count(self):
+        return self.count
     
     def __str__(self):
         if self.is_empty():
