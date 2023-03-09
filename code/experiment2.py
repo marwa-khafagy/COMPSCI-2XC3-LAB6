@@ -1,6 +1,6 @@
 from random import randrange
 
-from bst import BST
+from BST import BST
 from lab6 import RBTree
 from plotting import PlotGroup
 import matplotlib.pyplot as plot
