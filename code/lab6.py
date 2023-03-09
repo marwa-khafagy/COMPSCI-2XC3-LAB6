@@ -49,7 +49,7 @@ class RBNode:
         return "(" + str(self.value) + "," + self.colour + ")"
 
     def __repr__(self):
-         return "(" + str(self.value) + "," + self.colour + ")"
+        return "(" + str(self.value) + "," + self.colour + ")"
 
     def rotate_right(self):
 
@@ -58,16 +58,16 @@ class RBNode:
         isRoot = self.parent == None
         oldParent = self.parent
 
-        #Put Self Under Right of Left Child
+        # Put Self Under Right of Left Child
         self.parent = self.left
         self.parent.right = self
-        
-        #Give me child I replaced
+
+        # Give me child I replaced
         self.left = leftsRight
         if (leftsRight != None):
-            leftsRight.parent = self;
+            leftsRight.parent = self
 
-        #Attach Parent to Old Parent In Same Spot
+        # Attach Parent to Old Parent In Same Spot
         self.parent.parent = oldParent
         if (not isRoot):
             if (wasLeft):
@@ -75,31 +75,30 @@ class RBNode:
             else:
                 oldParent.right = self.parent
 
-
-
     def rotate_left(self):
-        
+
         rightsLeft = self.right.left
         isRoot = self.parent == None
         wasLeft = self.is_left_child()
         oldParent = self.parent
 
-        #Put Self Under Right of Left Child
+        # Put Self Under Right of Left Child
         self.parent = self.right
         self.parent.left = self
-        
-        #Give me child I replaced
+
+        # Give me child I replaced
         self.right = rightsLeft
         if (rightsLeft != None):
-            rightsLeft.parent = self;
+            rightsLeft.parent = self
 
-        #Attach Parent to Old Parent In Same Spot
+        # Attach Parent to Old Parent In Same Spot
         self.parent.parent = oldParent
         if (not isRoot):
             if (wasLeft):
                 oldParent.left = self.parent
             else:
                 oldParent.right = self.parent
+
 
 class RBTree:
 
@@ -147,21 +146,21 @@ class RBTree:
             self.root = self.root.parent
 
     def fix(self, node):
-        #You may alter code in this method if you wish, it's merely a guide.
+        # You may alter code in this method if you wish, it's merely a guide.
         if node.parent == None:
             node.make_black()
 
-        while node != None and node.parent != None and node.parent.is_red(): 
-            
-            #We insert nodes as red, therefor parent is red
+        while node != None and node.parent != None and node.parent.is_red():
 
-            #Get Uncle Redness
+            # We insert nodes as red, therefor parent is red
+
+            # Get Uncle Redness
             uncle = node.get_uncle()
             redUncle = False
             if uncle != None:
                 redUncle = uncle.is_red()
 
-            #Perform Color flip
+            # Perform Color flip
             if (redUncle):
                 node.parent.make_black()
                 node.parent.parent.make_red()
@@ -169,23 +168,22 @@ class RBTree:
 
                 node = node.parent.parent
 
-            #Rotate
+            # Rotate
             else:
 
                 # Check if it is a line or triangle rotation
                 leftChild = node.is_left_child()
                 lineRotation = leftChild == node.parent.is_left_child()
 
-
                 if (lineRotation):
 
-                    #Rotate Grand Parent
+                    # Rotate Grand Parent
                     if (leftChild):
                         node.parent.parent.rotate_right()
                     else:
                         node.parent.parent.rotate_left()
 
-                    #Update Root If Necessary
+                    # Update Root If Necessary
                     self.update_root()
 
                     # Recolour!!
@@ -194,14 +192,14 @@ class RBTree:
                     if (node.get_brother() != None):
                         node.get_brother().make_red()
 
-                #Triangle
+                # Triangle
                 else:
 
-                    #Rotate Parent
+                    # Rotate Parent
                     prevParent = node.parent
                     if (leftChild):
                         prevParent.rotate_right()
-                        node.parent.rotate_left() #new parent
+                        node.parent.rotate_left()  # new parent
 
                         node.make_black()
                         node.left.make_red()
@@ -209,17 +207,16 @@ class RBTree:
                     else:
                         prevParent.rotate_left()
                         node.rotate_right()
-                        
-                        #if (grandparent != None):
-                            #node.rotate_right()
+
+                        # if (grandparent != None):
+                        # node.rotate_right()
 
                     self.update_root()
-                    #Continue Self, Retest
+                    # Continue Self, Retest
 
-        #Ensure Black Root (subsequent black nodes allowed)
+        # Ensure Black Root (subsequent black nodes allowed)
         self.root.make_black()
-                    
-        
+
     def __str__(self):
         if self.is_empty():
             return "[]"
@@ -231,19 +228,18 @@ class RBTree:
         if node.left == None:
             return "[" + str(node) + " -> " + self.__str_helper(node.right) + "]"
         if node.right == None:
-            return "[" +  self.__str_helper(node.left) + " <- " + str(node) + "]"
+            return "[" + self.__str_helper(node.left) + " <- " + str(node) + "]"
         return "[" + self.__str_helper(node.left) + " <- " + str(node) + " -> " + self.__str_helper(node.right) + "]"
 
 #
 #
 #
 
+
 t = RBTree()
 insertions = [3, 1, 5, 7, 6, 8, 9, 10]
 
 for insertion in insertions:
-
-
     if (insertion == insertions[-1]):
         hi = 0
     t.insert(insertion)
