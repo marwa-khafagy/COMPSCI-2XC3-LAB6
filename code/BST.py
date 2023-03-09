@@ -5,7 +5,9 @@ class Node:
         self.left = None
 
     def is_leaf(self):
-        return self.left and self.right
+        return self.left == None and self.right == None
+    def __str__(self):
+        return "(" + str(self.value) + ")"
         
 
 
@@ -23,7 +25,7 @@ class BST:
             self.root = Node(value)
         else:
             temp = self.root
-            while temp.right or temp.left:
+            while temp:
                 if value > temp.value: 
                     if not temp.right:
                         temp.right = Node(value)
@@ -56,6 +58,4 @@ class BST:
             return "[" +  self.__str_helper(node.left) + " <- " + str(node) + "]"
         return "[" + self.__str_helper(node.left) + " <- " + str(node) + " -> " + self.__str_helper(node.right) + "]"
 
-
-                
 
