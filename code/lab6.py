@@ -208,10 +208,11 @@ class RBTree:
                         node.right.make_red()
                     else:
                         prevParent.rotate_left()
-                        node.rotate_right()
+                        node.parent.rotate_right()
                         
-                        #if (grandparent != None):
-                            #node.rotate_right()
+                        node.make_black()
+                        node.left.make_red()
+                        node.right.make_red()
 
                     self.update_root()
                     #Continue Self, Retest
@@ -240,7 +241,7 @@ class RBTree:
 
 if (__name__ == '__main__'):
     t = RBTree()
-    insertions = [3, 1, 5, 7, 6, 8, 9, 10]
+    insertions = [0, 1, 8447, 3, 8]
 
     for insertion in insertions:
 
