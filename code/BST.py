@@ -20,7 +20,7 @@ class BST:
     def is_empty(self):
         return self.height == 0
     
-    def add(self, value):
+    def insert(self, value):
         if self.height == 0:
             self.root = Node(value)
         else:

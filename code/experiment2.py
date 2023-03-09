@@ -1,4 +1,4 @@
-import random
+from random import randrange
 
 from BST import BST
 from lab6 import RBTree
@@ -15,8 +15,8 @@ def generate_near_sorted_list(size, swaps):
 
     #n swaps
     for _ in range(swaps):
-        i = random.randit(0, size-1)
-        j = random.randit(0, size-1)
+        i = randrange(size-1)
+        j = randrange(size-1)
 
         temp = sortedList[i]
         sortedList[i] = sortedList[j]
@@ -54,7 +54,13 @@ def height_test(trialCount, cInputSize, swapRange):
             #Insert
             for insert in insertions:
                 bst.insert(insert)
+                #print(f'\tbst: {insert}')
+            print('\tDone\n')
+
+            for insert in insertions:
                 rbt.insert(insert)
+                #print(f'\trbt: {insert}')
+            print('\tDone')
 
             # Add
             bstAvgHeight += bst.get_height()
@@ -85,4 +91,4 @@ def height_test(trialCount, cInputSize, swapRange):
 
 
 n = 10000
-height_test(100, n, range(0, n, 20))
+height_test(1, n, range(0, n, 250))
