@@ -1,6 +1,6 @@
 from random import randrange
 
-from bst import BST
+from BST import BST
 from lab6 import RBTree
 from plotting import PlotGroup
 import matplotlib.pyplot as plot
@@ -54,12 +54,10 @@ def height_test(trialCount, cInputSize, swapRange):
             for insert in insertions:
                 bst.insert(insert)
                 #print(f'\tbst: {insert}')
-            print('\tDone\n')
 
             for insert in insertions:
                 rbt.insert(insert)
                 #print(f'\trbt: {insert}')
-            print('\tDone')
 
             # Add
             bstAvgHeight += bst.get_height()
@@ -68,6 +66,7 @@ def height_test(trialCount, cInputSize, swapRange):
         # Avg
         bstAvgHeight /= trialCount
         rbtAvgHeight /= trialCount
+        print(f'Done {swaps}. BST:{bstAvgHeight}, RBT:{rbtAvgHeight}')
         
         # Plot
         bstPlot.add_point(swaps, bstAvgHeight)
@@ -76,7 +75,7 @@ def height_test(trialCount, cInputSize, swapRange):
     # Done Experiment for all swaps in range
 
     # Plot Here
-    name = f"Insertion Order Disorder vs Height of BST / RBT, {trialCount} Trials per Data Point"
+    name = f"Average Insertion Disorder On List Size {cInputSize} vs Tree Heights, {trialCount} Trials"
     plot.title(name)
 
     plot.xlabel("Number of Swaps in List")
@@ -90,4 +89,8 @@ def height_test(trialCount, cInputSize, swapRange):
 
 
 n = 10000
-height_test(1, n, range(0, n, 250))
+skips = 250
+
+
+figA = height_test(1, n, range(0, n, skips))
+figB = height_test(10, n, range(skips, n+5*skips, skips))
