@@ -39,7 +39,6 @@ class BST:
                     else:
                         temp = temp.left
 
-        self.height += 1
 
     def get_height(self):
         return self.height
