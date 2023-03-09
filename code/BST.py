@@ -1,8 +1,9 @@
 class Node:
-    def __init__(self, value):
+    def __init__(self, value, height):
         self.value = value
         self.right = None
         self.left = None
+        self.height = height #assumption, doesn't change
 
     def is_leaf(self):
         return self.left == None and self.right == None
@@ -14,25 +15,29 @@ class BST:
     def __init__(self):
         self.root = None
         self.count = 0
+        self.max_height = 0
     
     def is_empty(self):
         return self.count == 0
     
     def insert(self, value):
-        if self.count == 0:
-            self.root = Node(value)
+        if self.is_empty():
+            self.root = Node(value, 1)
+            self.max_height = 1
         else:
             temp = self.root
             while temp:
                 if value > temp.value: 
                     if not temp.right:
-                        temp.right = Node(value)
+                        temp.right = Node(value, temp.height+1)
+                        self.max_height = max(self.max_height, temp.height+1)
                         break
                     else:
                         temp = temp.right
                 elif value <= temp.value:
                     if  not temp.left:
-                        temp.left = Node(value)
+                        temp.left = Node(value, temp.height+1)
+                        self.max_height = max(self.max_height, temp.height+1)
                         break
                     else:
                         temp = temp.left
@@ -43,14 +48,7 @@ class BST:
         return self.count
     
     def get_height(self):
-        if self.is_empty():
-            return 0
-        return self.__get_height(self.root)
-
-    def __get_height(self, node):
-        if node == None:
-            return 0
-        return 1 + max(self.__get_height(node.left), self.__get_height(node.right))
+        return self.max_height
     
     def __str__(self):
         if self.is_empty():
