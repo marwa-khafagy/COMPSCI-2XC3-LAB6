@@ -1,5 +1,5 @@
 from lab6 import RBTree
-from BST import BST
+from bst import BST
 import timeit
 import random
 from plotting import PlotGroup
@@ -25,11 +25,11 @@ def run_xtrials(trials, num_of_nodes, max_value, min_value):
     rbHeight = 0
 
     #Loop Over
-    for _ in range(1, trials, 1):
+    for _ in range(trials):
         bst = BST()
         rbt = RBTree()
 
-        for i in range(1,num_of_nodes, 1):
+        for i in range(num_of_nodes):
             value = random.randint(min_value, max_value)
             bst.insert(value)
             rbt.insert(value)
@@ -55,9 +55,9 @@ def run_comparison_test(trials, listSizes, listMaxValue, listMinValue):
 
         timesForTrial = run_xtrials(trials, listSize, listMaxValue, listMinValue)
         
-        bstPlot.add_point(timesForTrial[1], listSize)
-        rbPlot.add_point(timesForTrial[0], listSize)
-        difPlot.add_point(abs(timesForTrial[0] -timesForTrial[0]), listSize)
+        bstPlot.add_point(listSize, timesForTrial[1])
+        rbPlot.add_point(listSize, timesForTrial[0], )
+        difPlot.add_point(listSize, abs(timesForTrial[0] - timesForTrial[1]))
         print("Added point at listSize ", listSize)
 
     name = f"The Difference in Height between RBTrees and BST ({trials} trails)"
@@ -80,6 +80,6 @@ def run_comparison_test(trials, listSizes, listMaxValue, listMinValue):
 
 if (__name__ == "__main__"):
 
-    test = run_comparison_test(1, range(0, 5, 1), 100, -100)
+    test = run_comparison_test(100, range(0, 1000, 1), 100, -100)
     #test = run_comparison_test(100, BBL, range(0, 500, 5), 1000)
 #print(test)    
