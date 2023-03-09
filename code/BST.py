@@ -44,6 +44,16 @@ class BST:
     def get_count(self):
         return self.count
     
+    def get_height(self):
+        if self.is_empty():
+            return 0
+        return self.__get_height(self.root)
+
+    def __get_height(self, node):
+        if node == None:
+            return 0
+        return 1 + max(self.__get_height(node.left), self.__get_height(node.right))
+    
     def __str__(self):
         if self.is_empty():
             return "[]"
