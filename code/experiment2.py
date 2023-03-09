@@ -5,7 +5,6 @@ from lab6 import RBTree
 from plotting import PlotGroup
 import matplotlib.pyplot as plot
 
-
 # =========================================================================
 
 def generate_near_sorted_list(size, swaps):
