@@ -1,5 +1,5 @@
 from lab6 import RBTree
-from bst import BST
+from BST import BST
 import timeit
 import random
 from plotting import PlotGroup
