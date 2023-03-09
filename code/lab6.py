@@ -238,16 +238,14 @@ class RBTree:
 #
 #
 
-t = RBTree()
-insertions = [3, 1, 5, 7, 6, 8, 9, 10]
+if (__name__ == '__main__'):
+    t = RBTree()
+    insertions = [3, 1, 5, 7, 6, 8, 9, 10]
 
-for insertion in insertions:
+    for insertion in insertions:
 
+        if (insertion == insertions[-1]):
+            hi = 0
+        t.insert(insertion)
 
-    if (insertion == insertions[-1]):
-        hi = 0
-    t.insert(insertion)
-
-    print(t)
-
-pass
+        print(t)
