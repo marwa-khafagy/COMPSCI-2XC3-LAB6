@@ -1,5 +1,5 @@
 from lab6 import RBTree
-from bst import BST
+from BST import BST
 import timeit
 import random
 from plotting import PlotGroup
@@ -25,13 +25,13 @@ def run_xtrials(trials, num_of_nodes, max_value, min_value):
     rbHeight = 0
 
     #Loop Over
-    for _ in range(trials):
+    for _ in range(1, trials, 1):
         bst = BST()
         rbt = RBTree()
 
-        for i in range(num_of_nodes):
+        for i in range(1,num_of_nodes, 1):
             value = random.randint(min_value, max_value)
-            bst.add(value)
+            bst.insert(value)
             rbt.insert(value)
 
         bstHeight+= bst.get_height()    
