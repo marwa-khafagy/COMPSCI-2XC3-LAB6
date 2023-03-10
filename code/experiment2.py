@@ -1,6 +1,6 @@
 from random import randrange
 
-from BST import BST
+from bst import BST
 from lab6 import RBTree
 from plotting import PlotGroup
 import matplotlib.pyplot as plot
@@ -88,9 +88,10 @@ def height_test(trialCount, cInputSize, swapRange):
     plot.show()
 
 
-n = 10000
-skips = 250
+if (__name__ == '__main__'):
 
+    n = 10000
+    skips = 250
 
-figA = height_test(1, n, range(0, n, skips))
-figB = height_test(10, n, range(skips, n+5*skips, skips))
+    figA = height_test(1, n, range(0, n, skips))
+    figB = height_test(10, n, range(skips, n+5*skips, skips))
