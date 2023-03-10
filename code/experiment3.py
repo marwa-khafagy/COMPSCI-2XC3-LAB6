@@ -1,66 +1,35 @@
-from random import randrange
-
 from XC3 import XC3Node
+from plotting import PlotGroup
+import matplotlib.pyplot as plot
 
-# =========================================================================
+'''
+Create XC3-Trees with degrees 0 to 25. In you report, based off your trees write an equation h(i), where
+h(i) returns the height of a degree i XC3-Tree. Explain why this is the case. These results likely aren’t
+mind-blowing but it is a reasonable place to start.
 
-def height_test(trialCount, cInputSize, swapRange):
+'''
+def test():
 
-    assert trialCount > 0
 
-    #Custom Plotting API
-    bstPlot = PlotGroup('Height of BST')
-    rbtPlot = PlotGroup('Height of RBT')
+    #New Dict
+    nodes = PlotGroup("XC3 Tree", 'b')
 
-    for swaps in swapRange:
+    for i in range(1,25,1):
+        root = XC3Node(i)
+        nodes.add_point(i, root.get_height())
 
-        print(f'Starting Swaps Number = {swaps}')
-
-        bstAvgHeight = 0
-        rbtAvgHeight = 0
-
-        #Loop
-        for _ in range(trialCount):
-
-            #Empty
-            bst = BST()
-            rbt = RBTree()
-
-            insertions = generate_near_sorted_list(cInputSize, swaps)
-
-            #Insert
-            for insert in insertions:
-                bst.insert(insert)
-                #print(f'\tbst: {insert}')
-
-            for insert in insertions:
-                rbt.insert(insert)
-                #print(f'\trbt: {insert}')
-
-            # Add
-            bstAvgHeight += bst.get_height()
-            rbtAvgHeight += rbt.get_height()
-
-        # Avg
-        bstAvgHeight /= trialCount
-        rbtAvgHeight /= trialCount
-        print(f'Done {swaps}. BST:{bstAvgHeight}, RBT:{rbtAvgHeight}')
-        
-        # Plot
-        bstPlot.add_point(swaps, bstAvgHeight)
-        rbtPlot.add_point(swaps, rbtAvgHeight)
-
-    # Done Experiment for all swaps in range
-
-    # Plot Here
-    name = f"Average Insertion Disorder On List Size {cInputSize} vs Tree Heights, {trialCount} Trials"
+    name = f"The Height of XC3 trees"
     plot.title(name)
 
-    plot.xlabel("Number of Swaps in List")
-    plot.ylabel("Height of Tree (Nodes)")
+    plot.xlabel("Degree of Tree (d)")
+    plot.ylabel("Height of Tree (s)")
 
-    bstPlot.plot()
-    rbtPlot.plot()
+    nodes.plot()
 
     plot.legend()
     plot.show()
+
+
+if (__name__ == "__main__"):
+
+    test()

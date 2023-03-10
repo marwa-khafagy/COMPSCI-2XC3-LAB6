@@ -13,18 +13,18 @@ class XC3Node:
         self.build_tree()
 
     def build_tree(self):
-        if self.degree <= 2:
-            for i in range(self.degree):
+        for i in range(1, self.degree + 1):
+            if i <= 2:
                 self.children.append(XC3Node(0))
-        else:
-            for i in range(self.degree - 1):
-                self.children.append(XC3Node(0))
-            self.children.append(XC3Node(self.degree - 2))
+            else:
+                self.children.append(XC3Node(i - 2))
 
     def get_height(self):
         return math.ceil(self.degree / 2)
 
     def get_number_of_nodes(self):
+        if self.degree == 0 or self.degree == 1 or self.degree == 2:
+            return self.degree + 1
         if not self.children:
             return 1
         res = 1
@@ -46,7 +46,24 @@ class XC3Node:
         return res
 
 
-root = XC3Node(5)
-print(root.get_string())
-print(root.get_height())
+rootx = XC3Node(0)
+rooty = XC3Node(1)
+root = XC3Node(2)
+root0 = XC3Node(3)
+root1 = XC3Node(4)
+root2 = XC3Node(5)
+root3 = XC3Node(6)
+root4 = XC3Node(7)
+root5 = XC3Node(8)
+root6 = XC3Node(9)
+print(rootx.get_number_of_nodes())
+print(rooty.get_number_of_nodes())
 print(root.get_number_of_nodes())
+print(root0.get_number_of_nodes())
+print(root1.get_number_of_nodes())
+print(root2.get_number_of_nodes())
+print(root3.get_number_of_nodes())
+print(root4.get_number_of_nodes())
+print(root5.get_number_of_nodes())
+print(root6.get_number_of_nodes())
+print(root0.get_string())
