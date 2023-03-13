@@ -57,7 +57,7 @@ def run_comparison_test(trials, listSizes, listMinValue, listMaxValue):
         rbPlot.add_point(listSize, timesForTrial[0], )
         print("Added point at listSize ", listSize)
 
-    name = f"The Difference in Height between RBTrees and BST ({trials} trails)"
+    name = f"The Difference in Height between RBT and BST ({trials} trails)"
     plot.title(name)
 
     plot.xlabel("Size of tree (n)")
@@ -78,5 +78,5 @@ if (__name__ == "__main__"):
 
     test = run_comparison_test(100, range(0, 1000, 10), 0, 10000) #Attempt on Unique Values
     test = run_comparison_test(100, range(0, 1000, 10), 0, 10) #Attempt on Very Similar Values
-    #test = run_comparison_test(100, BBL, range(0, 500, 5), 1000)
-#print(test)    
+
+    test = run_comparison_test(100, range(0, 1000, 10), 0, 1) #Binary
