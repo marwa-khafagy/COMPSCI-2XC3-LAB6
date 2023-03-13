@@ -45,25 +45,8 @@ class XC3Node:
 
         return res
 
+if (__name__ == '__main__'):
 
-rootx = XC3Node(0)
-rooty = XC3Node(1)
-root = XC3Node(2)
-root0 = XC3Node(3)
-root1 = XC3Node(4)
-root2 = XC3Node(5)
-root3 = XC3Node(6)
-root4 = XC3Node(7)
-root5 = XC3Node(8)
-root6 = XC3Node(9)
-print(rootx.get_number_of_nodes())
-print(rooty.get_number_of_nodes())
-print(root.get_number_of_nodes())
-print(root0.get_number_of_nodes())
-print(root1.get_number_of_nodes())
-print(root2.get_number_of_nodes())
-print(root3.get_number_of_nodes())
-print(root4.get_number_of_nodes())
-print(root5.get_number_of_nodes())
-print(root6.get_number_of_nodes())
-print(root0.get_string())
+    for i in range(10):
+        rootx = XC3Node(i)
+        print(rootx.get_string())
