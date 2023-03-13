@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{parskip}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage[section]{placeins}
+
+% Turn of Section Numbers
+\setcounter{secnumdepth}{0}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+%Title
+\title{COMPSCI 2XC3 Lab 6}
+\author{Alexander Eckardt, Marwa Khafagy, Om Patel}
+\date{March 2023}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+\newcommand{\figureInset}[2]
+{
+    \FloatBarrier{}
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=1\textwidth]{#1}
+        \caption{#2}
+    \end{figure}
+    \FloatBarrier{}
+}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+\begin{document}
+
+% Title
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+\section{Part One}
+\subsection{Red-Black Tree Implementation}
+\subsection{Experiment 1}
+\subsection{Experiment 2}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+\section{Part One}
+\subsection{Experiment 3}
+\subsection{Experiment 4}
+\subsubsection{Number of Nodes}
+\subsubsection{Argument on Height Bound}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\section{Executive Summary}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\section{Appendix}
+
+Each experiment can be found in it's own experiment python file. 
+
+Example, find Experiment 1's code and tests in \verb|experiment1.py|.
+
+The actual tests are found under the \verb|if __name__ == "__main__":| lines.
+
+The data structures are found in the included \verb|bst.py| and \verb|XC3.py|. We also have an included a custom API to help us plot our graphs found in \verb|plotting.py|.
+
+\end{document}
