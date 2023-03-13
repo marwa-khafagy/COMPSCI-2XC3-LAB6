@@ -76,7 +76,11 @@ def run_comparison_test(trials, listSizes, listMinValue, listMaxValue):
 
 if (__name__ == "__main__"):
 
-    test = run_comparison_test(100, range(0, 1000, 10), 0, 10000) #Attempt on Unique Values
-    test = run_comparison_test(100, range(0, 1000, 10), 0, 10) #Attempt on Very Similar Values
+    #
+    #LARGE Sizes
+    # test = run_comparison_test(100, range(0, 1000, 10), 0, 10000) #Attempt on Unique Values
+    # test = run_comparison_test(100, range(0, 1000, 10), 0, 10) #Attempt on Very Similar Values
+    # test = run_comparison_test(100, range(0, 1000, 10), 0, 1) #Binary
 
-    test = run_comparison_test(100, range(0, 1000, 10), 0, 1) #Binary
+    #Small Tree Comparison
+    test = run_comparison_test(100, range(50), 0, 10000) #Attempt on Unique Values

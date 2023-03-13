@@ -24,16 +24,25 @@
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
-
 \newcommand{\figureInset}[2]
 {
+    \figureInsetScaled{#1}{#2}{1}
+}
+
+\newcommand{\figureInsetScaled}[3]
+{
     \FloatBarrier{}
+    \figureRaw{#1}{#2}{#3}
+    \FloatBarrier{}
+}
+
+\newcommand{\figureRaw}[3]
+{
     \begin{figure}[ht!]
         \centering
-        \includegraphics[width=1\textwidth]{#1}
+        \includegraphics[width=#3\textwidth]{#1}
         \caption{#2}
     \end{figure}
-    \FloatBarrier{}
 }
 
 %% ------------------------------------------------------------------------------------------ %%
@@ -54,20 +63,150 @@
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
+%% ------------------------------------------------------------------------------------------ %%
 
 \section{Part One}
-\subsection{Red-Black Tree Implementation}
+
+%% ------------------------------------------------------------------------------------------ %%
 \subsection{Experiment 1}
+\subsubsection{Outline}
+
+Firstly, we define our implementation of both RBT and BST.
+
+Next, we define our test, \textit{Comparison Test}. We take in 4 values.
+\begin{itemize}
+    \item $x$, the number of trials to perform per data point.
+    \item $S$, a range of insertion counts.
+    \item $I_{min}$, the minimum value of a range to insert.
+    \item $I_{max}$, the maximum value of a range to insert.
+\end{itemize}
+
+In our \textit{Comparison Test}, we get an insertion count $s$ by iterating over the insertion counts in $S$.
+Then, we perform $x$ trials where we:
+
+\begin{itemize}
+    \item Initialize an Empty RBT and BST.
+    \item Calculate a number $k$ in the interval $[I_{min}, I_{max}]$.
+    \item Insert the number $k$ into both the BST and the RBT.
+    \item Repeat the creation and insertion of $k$ until there have been $s$ insertions.
+    \item Take note of the height of both the RBT and the BST.
+    \item Average the results of the height over the $x$ trials.
+\end{itemize}
+
+
+What this test ends up doing is that we get two trees, a BST and a RBT, containing the same values at every point in the insertion process. (same values inserted in the same order). The only difference at the end would be due to the Red Black Tree's Height Compression using it's rotate methods.
+
+We run four tests.
+\begin{enumerate}
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very large ([0, 10000]), and 100 trials per data point. This test shows us the difference in height where we have very unique values.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very small ([0, 10]), and 100 trials per data point. This test shows us how RBT compares to BST when the values are extremely close together, meaning there is a high of chance that the maximum or the minimum value is called repeatedly.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very small ([0, 1]), and 100 trials per data point. This test shows us how RBT compares to BST when the values inserted are of a binary pair, meaning it is ALWAYS either the minimum or the maximum value being called.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 50, skipping none, The interval of $k$ being very large ([0, 10000]), and 100 trials per data point. This test shows us the difference in height where we have very unique values, but also on a small node count.
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Results Figure 1}
+\figureInsetScaled{images/experiment1/Figure_1.png}{Test on (close to) Unique Valued Insertions}{0.5}
+
+Looking at the results for \textbf{Figure 1}, we see that we get an almost identical logarithmic curve. Because the values are all unique, we get the best case for both a BST. What we can see is that, empirically, a RBT is always has a height that is less than that of the BST with the same values and same order of insertions.
+
+We know the the height of a BST in this case is of $log(n)$, where n is the node count of the tree. We see here that the RBT follows the same curve, but at a lower height.
+
+This can either mean that the base of the log is different, or that the $c$ value of the tree is smaller (ie the height of the RBT still grows at log base 2 of the node count, but it usually compressed, meaning the hieght will be smaller).
+
+At the final data point $n=1000$, we say that the BST has a height of $\approx22$. The RBT has a height of $\approx15$. Then, we can say that at $n=1000$ the height is a difference of about 7, or the RBT would have a height $60\%$ of that of a BST.
+
+\subsubsection{Takeaway Figure 2}
+\figureInsetScaled{images/experiment1/Figure_2.png}{Test on Similar Valued Insertions}{0.5}
+
+Looking at the results here, we see that very quickly, the height of the BST explodes. This is most likely due to the fact that we are consistently choosing the minimum or the maximum number in the range, and growing the tree from the ends. 
+
+This makes sense when we look at the height compared to the average values. Within this test, our $k$ value to be inserted was from 0 to 10. Thus, the chance that either the minimum and maximum were chosen as the $k$ value is 2/11.
+
+Here, I define the maximum or minimum path of the tree as the path following ONLY the left child (minimum path) or right child (maximum path). I define these terms as if we follow our path, the last node is guaranteed to be the smallest or largest value in the tree (allowing for duplicates).
+
+When we insert the minimum value (0), when the path length of the minimum path is the tree's height, we then must increase the size of the tree, as this final node is defined to have no children. Same follows for the maximum and maximum path.
+
+It is good to assume that the height of the tree is determined by the maximum number of either the minimum or maximum values in the tree, because adding them must increase the minimum or maximum path.
+
+Thus, Seeing as we have 2 paths, we should expect the height of this BST to be half of the percentage that either the maximum or minimum is chosen as $k$.
+
+Thus, $2/11 * 1/2 * n$ = $n/11 \approx 1.11n$ 
+
+Looking at our graph, we see that after 1000 insertions, the height of our BST is approximately 120, which lines up with our prediction.
+
+Our RBT however, has no such pitfalls. After our insertions, we rotate the minimum/maximum paths such that insertions are not guaranteed to increase the height of the tree, explaining why our height stays so low.
+
+At this point, the difference between the height of the two trees approaches the height of the BST.
+
+\subsubsection{Takeaway Figure 3}
+\figureInsetScaled{images/experiment1/Figure_3.png}{Test on Binary Valued Insertions}{0.5}
+
+These results are similar to the result of Figure 2.
+
+In fact, we can draw upon our conclusion from Figure 2, but here the chance of inserting the minimum or maximum value is exactly $100\%$.
+
+Thus, we expect our height to be $1/1 * 1/2 * n = 1/2n \approx .5n$ As here $n$ is 1000, we should expect to see our BST height at 500, which we do.
+
+Again, our RBT has no such expanding from the edges problem, so it's height is extremely low when compared to that of our BST.
+
+At this point, the difference between the height of the two trees approaches the height of the BST.
+
+\subsubsection{Takeaway Figure 4}
+\figureInsetScaled{images/experiment1/Figure_4.png}{Test on Uniquely Valued Insertions on Small Tree}{0.5}
+
+These results are similar to the result of Figure 1, but we get a higher definition view of the smaller list sizes.
+
+At the final data point $n=50$, we say that the BST has a height of $\approx12$. The RBT has a height of $\approx 7$. Then, we can say that at $n=50$ the height is a difference of about 5, or the RBT would have a height $58\%$ of that of a BST.
+
+As we can see, just like before, the RBT out performs the BST.
+
+\subsubsection{Final Takeaway}
+
+At both $n=50$ and $n=1000$, (in trials 1 and 4), the RBT appears to have a height of $60\%$ that of the BST. This is, however, the best case for the BST. If the BST is NOT given it's best/average case, we see that it's height grows much faster than that of a RBT.
+
+Then, we can say that a RBT will, empirically, in general, have a height that is $< \approx 60\%$ that of a BST.
+
+
+%% ------------------------------------------------------------------------------------------ %%
 \subsection{Experiment 2}
 
+\subsubsection{Outline}
+
+\subsubsection{Results}
+
+\subsubsection{Takeaway}
+
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
 
-\section{Part One}
+\section{Part Two}
 \subsection{Experiment 3}
+
+\subsubsection{Outline}
+
+\subsubsection{Results}
+
+\subsubsection{Takeaway}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
 \subsection{Experiment 4}
+
+\subsubsection{Outline}
+
+\subsubsection{Results}
+
+\subsubsection{Takeaway}
+
 \subsubsection{Number of Nodes}
 \subsubsection{Argument on Height Bound}
 
