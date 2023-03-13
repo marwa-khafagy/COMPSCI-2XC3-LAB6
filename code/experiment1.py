@@ -15,7 +15,7 @@ In your report your experiment should include:...
 #-----------------------------------------------------------------------------------------------------------#
 # Trial Functions
 
-def run_xtrials(trials, num_of_nodes, max_value, min_value):
+def run_xtrials(trials, num_of_nodes, min_value, max_value):
 
     bstHeight = 0
     rbHeight = 0
@@ -23,7 +23,7 @@ def run_xtrials(trials, num_of_nodes, max_value, min_value):
     #Loop Over
     for _ in range(trials):
 
-        #E
+        #Empty Tree
         bst = BST()
         rbt = RBTree()
 
@@ -43,15 +43,15 @@ def run_xtrials(trials, num_of_nodes, max_value, min_value):
     #Return
     return (rbHeight, bstHeight)
 
-def run_comparison_test(trials, listSizes, listMaxValue, listMinValue):
+def run_comparison_test(trials, listSizes, listMinValue, listMaxValue):
 
     #New Dict
-    bstPlot = PlotGroup("BST", 'b')
-    rbPlot = PlotGroup("RB Tree" ,'r')
+    bstPlot = PlotGroup("Height of BST")
+    rbPlot = PlotGroup("Height of RBT", 'r')
 
     for listSize in listSizes:
 
-        timesForTrial = run_xtrials(trials, listSize, listMaxValue, listMinValue)
+        timesForTrial = run_xtrials(trials, listSize, listMinValue, listMaxValue)
         
         bstPlot.add_point(listSize, timesForTrial[1])
         rbPlot.add_point(listSize, timesForTrial[0], )
