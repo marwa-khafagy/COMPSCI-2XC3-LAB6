@@ -59,6 +59,9 @@
 \tableofcontents
 \newpage
 
+\tableoffigures
+\newpage
+
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
@@ -171,37 +174,176 @@ At both $n=50$ and $n=1000$, (in trials 1 and 4), the RBT appears to have a heig
 
 Then, we can say that a RBT will, empirically, in general, have a height that is $< \approx 60\%$ that of a BST.
 
+Therefor, looking at the cases we have been given, we conclude that there is almost no need to have a BST, as a RBT out performs it in every scenario provided. The only scenario that a BST may be preferable is when the tree size is small and the performance increase does not warrant actually implementing a RBT.
 
 %% ------------------------------------------------------------------------------------------ %%
+\newpage
 \subsection{Experiment 2}
 
 \subsubsection{Outline}
 
-\subsubsection{Results}
+Like in Experiment 1, We trial based on the height of the tree, but now we keep the number of insertions constant.
 
-\subsubsection{Takeaway}
+We define our test, \textit{Height Test}. We take in 4 values.
+\begin{itemize}
+    \item $z$, the number of trials to perform per data point.
+    \item $n$, the number of insertions to be done per tree.
+    \item $X$ A range of swaps to be performed.
+\end{itemize}
+
+The process of the test is as follows:
+
+\begin{enumerate}
+    \item Initialize an Empty RBT and BST.
+    \item Generate a sorted list $L$ of size $n$.
+    \item Perform $x$ swaps in the list, where $x \in X$.
+    \item Perform insertions of the values in $L$ into the RBT and BST, in the same order.
+    \item Take note of the height of both the RBT and the BST.
+    \item Average the results of the heights over the $z$ trials per data point $x$.
+\end{enumerate}
+
+Finally, we define the actual tests we performed.
+\begin{enumerate}
+    \item A Height Test, where $z=1, n=10000$ and $X$ starts from 0, goes to $n$, skipping every 250.
+    
+    \item A Height Test, where $z=10, n=10000$ and $X$ starts at 250, goes to $2n$, skipping every 250.
+
+    \item A Height Test, where $z=3, n=10000$ and $X$ starts from 0, goes to $250$, skipping every $5^{th}$ node count.
+\end{enumerate}
+
+\subsubsection{Take Away Test 1}
+\figureInsetScaled{images/experiment2/Figure_1.png}{}{0.5}
+
+The idea of this trial is to get a basic understanding of how they behave, on average.
+
+What we can see from Figure 5 is that right away, the height of the BST is exactly 10000, which is our $n$ value for this test. This is because inserting a sorted list into a binary search tree effectively creates a linked list structure; every insertion is larger than the previous, meaning it is always placed into the right child of the bottom node. This means that our height of our tree is exactly the length of the list.
+
+Our RBT has no such issue, staying extremely low due to our branch rotation.
+
+What this means is that the Difference sticks very closely to the height of the BST.
+
+\subsubsection{Results Test 2}
+\figureInsetScaled{images/experiment2/Figure_2.png}{}{0.5}
+
+As we have already seen the worst case in Figure 5, for this test we start with 250 swaps. This way, we don't have to see the large data point at x=0 which causes the range of the y axis to be extremely large.
+
+In this test, we expand the number of swaps to see how random swaps 
+
+After $n$ random swaps, we are effectively guaranteed a random list, so we expand this range to see if the number of swaps after this range has any affect on the height of the tree.
+
+What we see is that it doesn't-- after we have successfully `fully' randomized the list, no more swaps cause any change.
+
+We see once again that the difference sticks very closely to the height of the BST.
+
+\subsubsection{Results Test 3}
+\figureInsetScaled{images/experiment2/Figure_3.png}{}{0.5}
+
+As in Test 2, we removed the interaction of the worst case for BST to make it easier to see the rest of the graph, here we ONLY include the worst case test to see the difference between them.
+
+This test then, is just a zoomed in version of between the first two data points (x=0 and x=250) in Figure 5.
+
+As we see in Figure 7, the Height of the BST very quickly drops down to somewhat `reasonable' levels (much closer to the RBT), while the RBT stays quite low the entire time. 
+
+And again, the difference sticks very closely to the height of the BST.
+
+\subsubsection{Final Takeaway}
+
+Because we perform swaps in the list, and we perform the insertions into a tree based on the order of the list, we are testing the effect of the order of insertions on the height of a tree. Because all we do is swap, all of our insertion lists are permutations of one another.
+
+We also note that after completing n swaps, we effectively are performing the same tests as in Experiment 1, with truly unique values. We can verify this by performing another test and seeing the difference in height.
+
+We can see that throughout the entire experiment, that the height of the RBT is effectively constant. This means that the height of a Red Black Tree is invariant on the order of insertions.
+
+However, as we see in Figure 5 and 7, the order of the insertions can have a large effect on the height of the tree.
 
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
-
+\newpage
 \section{Part Two}
 \subsection{Experiment 3}
 
 \subsubsection{Outline}
 
-\subsubsection{Results}
+After defining the XC3 Tree and looking at the height of the trees with degrees 0 through 25, we are given these results.
 
-\subsubsection{Takeaway}
+\figureInsetScaled{images/experiment3/Figure_1.png}{Height of XC3 At Different Degrees}{0.65}
+
+As we can see, we step up in height after every second node.
+
+As we start at height of 1 at a degree of 0, we then go straight away to height 2 at degree 1. We can also see that at degree 3 we go up to height of 3.
+
+Thus, every time we increment from an even degree to an odd degree we increase the height.
+
+Thus, we can say our equation for the height of the tree is 
+\\
+{
+\Large
+\begin{center}
+    $h(i) = \lfloor \frac{i+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+\\
+Where $i$ is the degree of the tree.
+
+The reasons for this behaviour become clear when we draw out the degree of each tree.
+
+
+These rules from the definition of the XC3 is important to recite here:
+
+\begin{itemize}
+    \item Each child of the root node of an XC3-Tree is also an XC3-Tree.
+    \item The ith child of the root node of an XC3-Tree has degree (i-2) if i > 2. Otherwise it has degree 0.
+\end{itemize}
+
+\subsubsection{XC3 Tree Height Increase Explanation}
+
+\figureInsetScaled{images/experiment3/points.png}{XC3 Trees of Degrees 0 - 5}{0.65}
+
+Some properties we can also see looking at this diagram
+\begin{itemize}
+    \item A Degree $i$ is `shared' or `contained' in a degree $i+1$ tree. That is, each tree is built off the previous degree.
+\end{itemize}
+
+When we build our tree, we start at degree 0. It must have no children. However, as we use in our definition and diagram in the assignment, we see that we must use a node, somewhere. As every tree is built with degree 0 trees, A degree 0 tree must contain at least one node, thus having height one.
+
+At Degree $i=1$, we see that we must now increase the height of the tree.
+
+At Degree $i=2$, We add another node. Because we add a second child, it must also have degree 0, thus the height of our tree does not increase.
+
+However, at degree $i=3$, we now add a child where it's `local' i is $>2$. Thus, we now take $i-2 = 1$. Because of rule 1, we see we must add a valid XC3 tree of degree 1. A tree of degree one has it's own child node, which increases our tree's height.
+
+At degree $i=4$, we must now also add a child of degree $2$. However, A Degree 2 XC3-Tree has the same height as a degree 1 XC3 Tree, which means our Degree 4 tree does not increase in height, but rather fills out the bottom layer.
+
+\subsubsection{XC3 Tree Height Increase Reword}
+
+We can repeat this pattern on forever. At the root of the cause is this: an Odd degree tree will contain, at some point, a degree 1 descendant$^{*}$, without a matching degree 2 descendant in the same generation$^{*}$. 
+
+When we add another degree, this tree is repeated, but with the addition of the degree 2 node on the same generation- causing no height change.
+
+And when we repeat this again, we would append a degree 3 node, which then has a degree 1 child.
+
+This is, in effect, a recursive definition.
+
+This property of having a single descendant at the bottom of it's ith node descendants is the reason why an XC3-Tree increases in height every other node.
+
+------------------------------------------------------
+
+{
+\small
+I hesitate to use the word grandchild as some node could be many `layers' deep, not necessarily the child of the child. I use the word generation to stick with the `family' relation terminology.
+}
 
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
+\newpage
 \subsection{Experiment 4}
 
-\subsubsection{Outline}
+\subsubsection{Outline}mosia
 
 \subsubsection{Results}
 

@@ -13,7 +13,7 @@ def test():
     #New Dict
     nodes = PlotGroup("Height of XC3 Tree")
 
-    rang = range(1,25,1)
+    rang = range(0,25,1)
     for i in rang:
         root = XC3Node(i)
         nodes.add_point(i, root.get_height())
