@@ -19,7 +19,9 @@ def test():
     rang = range(1,25,1)
     for i in rang:
         root = XC3Node(i)
-        nodes.add_point(i, root.get_number_of_nodes())
+        n = root.get_number_of_nodes()
+        nodes.add_point(i, n)
+        print(f"({i},{n})")
 
     name = f"The Number of Nodes in XC3 tree"
     plot.title(name)
@@ -31,6 +33,8 @@ def test():
 
     plot.legend()
     plot.show()
+
+    print(nodes.ypoints)
 
 
 if (__name__ == "__main__"):
