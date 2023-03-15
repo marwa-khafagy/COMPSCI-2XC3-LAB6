@@ -59,7 +59,7 @@
 \tableofcontents
 \newpage
 
-\listoffigures
+\tableoffigures
 \newpage
 
 %% ------------------------------------------------------------------------------------------ %%
@@ -266,7 +266,17 @@ However, as we see in Figure 5 and 7, the order of the insertions can have a lar
 
 \subsubsection{Outline}
 
-After defining the XC3 Tree and looking at the height of the trees with degrees 0 through 25, we are given these results.
+First, we define the function \verb|get_height()|.
+
+\begin{itemize}
+    \item Initialize a height counter at 1. This is because the height of a node MUST be one.
+    \item Loop through all children. Set our height counter to be the max of either our current height counter, or the height of my child node + 1. (+1 for myself, again).
+    \item return the height of the node.
+\end{itemize}
+
+This is a recursive definition, and we run it on the root node to get the Height of the entire tree.
+
+After defining the XC3 Trees with degrees 0 through 25 and looking at the height of the trees, we are given these results.
 
 \figureInsetScaled{images/experiment3/Figure_1.png}{Height of XC3 At Different Degrees}{0.65}
 
@@ -285,6 +295,7 @@ Thus, we can say our equation for the height of the tree is
     $ $
 \end{center}
 }
+\\
 Where $i$ is the degree of the tree.
 
 The reasons for this behaviour become clear when we draw out the degree of each tree.
@@ -384,6 +395,7 @@ Thus, a naive approach to our equation for calculating the height of our tree wo
     $ $
 \end{center}
 }
+\\
 Where $i$ is the degree of the tree.
 
 We have to shift our Fibonacci Number sequence down however, because at x:1 we get the number 2, when normally we would get 1. Thus, we need to redefine x:0 and x:1 for this to hold.
