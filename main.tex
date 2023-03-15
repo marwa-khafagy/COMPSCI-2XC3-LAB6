@@ -343,14 +343,194 @@ I hesitate to use the word grandchild as some node could be many `layers' deep, 
 \newpage
 \subsection{Experiment 4}
 
-\subsubsection{Outline}mosia
-
-\subsubsection{Results}
-
-\subsubsection{Takeaway}
-
 \subsubsection{Number of Nodes}
-\subsubsection{Argument on Height Bound}
+
+Here we outline a recursive function to counting the number of nodes of any XC3 tree.
+
+As a node with degree $i$ will have $i$ children, we can count the degrees of every node and sum them up.
+
+The process is as follows:
+\begin{enumerate}
+    \item Keep a count at some node. Set count = 1.
+    \item Iterate over the children of node $k$, calling their \verb|count()| function. Add this count to count.
+    \item Return the sum the counts.
+\end{enumerate}
+
+We call this function on the root node, which then does bottom up recursion to hit every node.
+
+The results are as follows.
+
+\figureInsetScaled{images/experiment4/Figure_1.png}{Number of Nodes in XC3 Trees of Degrees 0 - 25}{0.65}
+
+We can't tell much, but due to the scale of the y axis we can be sure that this function grows at least at an exponential rate.
+
+Instead, we can display each of the data points.
+
+\figureInsetScaled{images/experiment4/points.png}{Tuples of XC3 Degree vs XC3 Node Count}{0.65}
+
+What we can clearly see here is that our nodes follow the pattern of the Fibonacci Sequence.
+
+
+\subsubsection{Number of Nodes Equation Naive}
+
+Thus, a naive approach to our equation for calculating the height of our tree would be.
+\\
+{
+\Large
+\begin{center}
+    $nodes_{bad}(i) = nodes_{bad}(i-2) + nodes_{bad}(i-1)$\\
+    $ $\\
+    $nodes_{bad}(0) = 1$\\
+    $nodes_{bad}(1) = 2$\\
+    $ $
+\end{center}
+}
+\\
+Where $i$ is the degree of the tree.
+
+We have to shift our Fibonacci Number sequence down however, because at x:1 we get the number 2, when normally we would get 1. Thus, we need to redefine x:0 and x:1 for this to hold.
+
+I called this a naive approach because this method is not very effective at letting us understand the nature of this function's growth.
+
+\subsubsection{Number of Nodes Equation Real}
+
+As stated above, this function looks like it grows at an exponential rate. What we can do to determine if this is true is by determining the ratio of one Fibonacci number to the next. If the ratio remains the same (or converges quickly, we can say it matches follows that exponential base.
+
+The motivation of this would be $2^x$, for example. $2^{i+1} / 2^{i} = 2$, for any $i$.
+
+Thus, performing the ratio of the calculated node counts (which IS the Fibonacci sequence, without the first one) above
+
+\begin{itemize}
+    \item $2 / 1 = 2$
+    \item $3 / 2 = 1.5$
+    \item $5 / 3 \approx 1.667$
+    \item $8 / 5 \approx 1.6$
+    \item $13 / 8 \approx 1.625$
+    \item $21 / 13 \approx 1.611$
+    \item $34 / 21 \approx 1.619$
+    \item $55 / 34 \approx 1.617$
+    \item $89 / 55 \approx 1.618$
+\end{itemize}
+
+In fact, as we continue to do this, the ratio very quickly converges onto the value $1.618033...$, or, the golden ratio $\varphi$.
+
+Thus, we have anecdotally shown that our sequence follows the exponential function with $\varphi$ as its base.
+
+In other words, the $n$th Fibonacci Number can be approximated as $\varphi^{n}$. As we use integers, it would be smart to round it, so we perform $\lceil \varphi^{n} \rfloor$.
+
+$\lceil \varphi^{n} \rfloor$ is a good approximation, but it isn't 100\% correct. However, after finding a resource online, we can fix this in-correction by adding a scale factor to our exponential, $5^{-1/2}$. This produces the equation
+
+{
+\Large
+\begin{center}
+    $\lceil \frac{\varphi^{n}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+Which correctly produces the nth Fibonacci Number, for some given integer n.
+
+However, as our Fibonacci sequence is one removed, we must modify it slightly by shifting the $n$ value over. Therefor, our final function for calculating the height of our tree:
+
+
+{
+\Large
+\begin{center}
+    $nodes(i) = \lceil \frac{\varphi^{i+2}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+Which correctly produces the number of nodes in a given XC3 with degree $i$.
+
+
+\subsubsection{Number of Nodes Equation Explanation}
+
+The reason as to WHY our XC3 Tree node count follows the Fibonacci sequence is easily explainable.
+
+When we construct a tree of degree $i$, we can first start off with a tree of $i-1$. It is easy to see that, at this point, our tree has $nodes(i-1)$.
+
+
+We need to add one more child to the root node to increase this tree's degree to $i$.
+
+However, this new node is supposed to have degree $i-2$, by the rules of the XC3 Tree. In other words, instead of adding just a single node, we need to add an entire XC3 tree of degree $i-2$. This means, in reality, we are adding $nodes(i-2)$ nodes.
+
+This makes it easy to see that $nodes(i) = nodes(i-1) + nodes(i-2)$, because that is how we constructed the tree.
+
+The rules of a degree 0 having no children also makes sense, as having a degree 0 would only add one (the base case of our Fibonacci sequence).
+
+%%% ------------------------------------------------------------------------------------------------------- %%%
+\subsection{Height of Tree Complexity}
+
+We write an argument for why the height of our tree is $O($log$(n))$, where $n$ is the number of nodes in the tree.
+
+As we have shown in Experiment 4, The number of nodes $n$ in an XC3 Tree is
+{
+\begin{center}
+    $n = \lceil \frac{\varphi^{i+2}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+
+However, when using Big-O Notation, we can simplify this Equation heavilty.
+
+Using Big-O notation, it can be shown that these properties preserve the functions order.
+\begin{itemize}
+    \item Rounding/Flooring/Ceiling
+    \item Left-Right Shift
+    \item Scaling
+\end{itemize}
+
+The motivation for this is that for any changes to these features, there still exists a constant $c$ that for some value $k$, all $x > k$, $f(x) \leq cg(x)$.
+
+If we remove all of these features from our $node(i)$ function, we see that it is on the order of $O(\varphi^i)$.
+
+This function describes  the node count $n$ for a certain degree $i$. Thus, it stands to reason that the inverse of this function would describe the degree $i$ for any node count $n$.
+
+The inverse of this function would be $i = $log$_{\varphi}(n)$.
+
+As we have shown in experiment 3, The height of an XC3 tree is
+{
+\begin{center}
+    $h(i) = \lfloor \frac{i+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+Where $i$ is the degree of the tree.
+
+If we want to apply this formula to our degree formula, we can.
+We simply switch for n with our inverse function.
+{
+\begin{center}
+    $h(n) = \lfloor \frac{log_{\varphi}(n)+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+And, just as above, if we remove the scaling, the shifts and the the rounding, we are left with an order of 
+    \begin{center}
+    $O($log$_{\varphi}(n))$.
+    \end{center}
+Thus, the order of getting the height of a tree with $n$ nodes is that of $O($log$_{\varphi}(n))$.
+
+However, we are writing an argument for why the height is $O($log$(n))$, not $O($log$_{\varphi}(n))$.
+
+But we can show that these two functions are of the same order.
+
+We use the change of base formula to transform log$_{\varphi}(n)$ to log$_{b}(n)$, for any base $b$.
+
+\begin{center}
+    = log$_{\varphi}(n)$\\
+    = log$_{b}(n) / $log$_{b}(\varphi)$\\
+    = $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$\\
+\end{center}
+
+As $b$ and $\varphi$ are constant values, $\frac{1}{log_{b}(\varphi)}$ must also be a constant value coefficient.
+
+Thus, We have O(g(n), where g(n) = log$_{\varphi}(n)$. As g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, and We also have O(g(n)), and these two sets are equivalent. 
+
+However, as shown, we have a constant value coefficient-- we can remove the scaling just as before to preserve order and get O(log$_{b}(n)$). Notice this works for any base $b$.
+
+Thus, $O(log_{a}(n)) = O(log_{b}(n)$, for any two bases $a, b$. This is why we simply write $O(log(n))$, the base doesn't matter from an order perspective.
+
+Therefor, the order of getting the height of an XC3 tree with $n$ nodes is that of $O($log$_{\varphi}(n))$ = $O($log$(n))$.
 
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
@@ -358,10 +538,15 @@ I hesitate to use the word grandchild as some node could be many `layers' deep, 
 
 \section{Executive Summary}
 
+From Part 1, We learn that, due to the self balancing of Red Black Trees, they are better to use in effectively every case than a regular BST.
+
+From Part 2, We learn the Order of the Fibonacci sequence is that of O($\varphi^{n}$), and the reason why there is no base included in the term O(log(n)), they all mean the same thing. 
+
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
 
+\newpage
 \section{Appendix}
 
 Each experiment can be found in it's own experiment python file. 
