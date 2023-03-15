@@ -16,7 +16,7 @@ def test():
     #New Dict
     nodes = PlotGroup("Node Count of XC3 Tree")
 
-    rang = range(1,25,1)
+    rang = range(0,25,1)
     for i in rang:
         root = XC3Node(i)
         n = root.get_number_of_nodes()
