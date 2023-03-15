@@ -20,7 +20,16 @@ class XC3Node:
                 self.children.append(XC3Node(i - 2))
 
     def get_height(self):
-        return math.floor((self.degree+1) / 2) + 1
+        
+        #Height of a tree with a node(i am a node) is at least 1
+        maxx = 1
+
+        for child in self.children:
+            maxx = max(maxx, 1 + child.get_height())
+
+        return maxx
+
+
 
     def get_number_of_nodes(self):
         if self.degree == 0 or self.degree == 1 or self.degree == 2:
