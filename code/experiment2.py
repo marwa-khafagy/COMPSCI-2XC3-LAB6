@@ -1,9 +1,11 @@
 from random import randrange
 
-from BST import BST
+from bst import BST
 from lab6 import RBTree
 from plotting import PlotGroup
 import matplotlib.pyplot as plot
+
+figureCount = 1
 
 # =========================================================================
 
@@ -31,8 +33,9 @@ def height_test(trialCount, cInputSize, swapRange):
     assert trialCount > 0
 
     #Custom Plotting API
-    bstPlot = PlotGroup('Height of BST')
-    rbtPlot = PlotGroup('Height of RBT')
+    bstPlot = PlotGroup('Height of BST', "#ccffcc")
+    rbtPlot = PlotGroup('Height of RBT', "#ffcccc")
+    diff = PlotGroup('Height BST - RBT', '#9a076e')
 
     for swaps in swapRange:
 
@@ -71,6 +74,7 @@ def height_test(trialCount, cInputSize, swapRange):
         # Plot
         bstPlot.add_point(swaps, bstAvgHeight)
         rbtPlot.add_point(swaps, rbtAvgHeight)
+        diff.add_point(swaps, bstAvgHeight - rbtAvgHeight)
 
     # Done Experiment for all swaps in range
 
@@ -83,14 +87,20 @@ def height_test(trialCount, cInputSize, swapRange):
 
     bstPlot.plot()
     rbtPlot.plot()
+    diff.plot()
+
+    plot.savefig(f"Figure_{figureCount}.png")
+    figureCount+=1
 
     plot.legend()
     plot.show()
 
 
-n = 10000
-skips = 250
+if (__name__ == '__main__'):
 
+    n = 10000
+    skips = 250
 
-figA = height_test(1, n, range(0, n, skips))
-figB = height_test(10, n, range(skips, n+5*skips, skips))
+    figA = height_test(1, n, range(0, n, skips))
+    figB = height_test(10, n, range(skips, 2*n, skips))
+    figC = height_test(3, n, range(0, 255, 5))

@@ -1,0 +1,568 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{parskip}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage[section]{placeins}
+
+% Turn of Section Numbers
+\setcounter{secnumdepth}{0}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+%Title
+\title{COMPSCI 2XC3 Lab 6}
+\author{Alexander Eckardt, Marwa Khafagy, Om Patel}
+\date{March 2023}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\newcommand{\figureInset}[2]
+{
+    \figureInsetScaled{#1}{#2}{1}
+}
+
+\newcommand{\figureInsetScaled}[3]
+{
+    \FloatBarrier{}
+    \figureRaw{#1}{#2}{#3}
+    \FloatBarrier{}
+}
+
+\newcommand{\figureRaw}[3]
+{
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=#3\textwidth]{#1}
+        \caption{#2}
+    \end{figure}
+}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+
+\begin{document}
+
+% Title
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\listoffigures
+\newpage
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+%% ------------------------------------------------------------------------------------------ %%
+
+\section{Part One}
+
+%% ------------------------------------------------------------------------------------------ %%
+\subsection{Experiment 1}
+\subsubsection{Outline}
+
+Firstly, we define our implementation of both RBT and BST.
+
+Next, we define our test, \textit{Comparison Test}. We take in 4 values.
+\begin{itemize}
+    \item $x$, the number of trials to perform per data point.
+    \item $S$, a range of insertion counts.
+    \item $I_{min}$, the minimum value of a range to insert.
+    \item $I_{max}$, the maximum value of a range to insert.
+\end{itemize}
+
+In our \textit{Comparison Test}, we get an insertion count $s$ by iterating over the insertion counts in $S$.
+Then, we perform $x$ trials where we:
+
+\begin{itemize}
+    \item Initialize an Empty RBT and BST.
+    \item Calculate a number $k$ in the interval $[I_{min}, I_{max}]$.
+    \item Insert the number $k$ into both the BST and the RBT.
+    \item Repeat the creation and insertion of $k$ until there have been $s$ insertions.
+    \item Take note of the height of both the RBT and the BST.
+    \item Average the results of the height over the $x$ trials.
+\end{itemize}
+
+
+What this test ends up doing is that we get two trees, a BST and a RBT, containing the same values at every point in the insertion process. (same values inserted in the same order). The only difference at the end would be due to the Red Black Tree's Height Compression using it's rotate methods.
+
+We run four tests.
+\begin{enumerate}
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very large ([0, 10000]), and 100 trials per data point. This test shows us the difference in height where we have very unique values.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very small ([0, 10]), and 100 trials per data point. This test shows us how RBT compares to BST when the values are extremely close together, meaning there is a high of chance that the maximum or the minimum value is called repeatedly.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 1000, skipping 10, The interval of $k$ being very small ([0, 1]), and 100 trials per data point. This test shows us how RBT compares to BST when the values inserted are of a binary pair, meaning it is ALWAYS either the minimum or the maximum value being called.
+
+    \item A \textit{Comparison Test} with $S$ from 0 to 50, skipping none, The interval of $k$ being very large ([0, 10000]), and 100 trials per data point. This test shows us the difference in height where we have very unique values, but also on a small node count.
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Results Figure 1}
+\figureInsetScaled{images/experiment1/Figure_1.png}{Test on (close to) Unique Valued Insertions}{0.5}
+
+Looking at the results for \textbf{Figure 1}, we see that we get an almost identical logarithmic curve. Because the values are all unique, we get the best case for both a BST. What we can see is that, empirically, a RBT is always has a height that is less than that of the BST with the same values and same order of insertions.
+
+We know the the height of a BST in this case is of $log(n)$, where n is the node count of the tree. We see here that the RBT follows the same curve, but at a lower height.
+
+This can either mean that the base of the log is different, or that the $c$ value of the tree is smaller (ie the height of the RBT still grows at log base 2 of the node count, but it usually compressed, meaning the hieght will be smaller).
+
+At the final data point $n=1000$, we say that the BST has a height of $\approx22$. The RBT has a height of $\approx15$. Then, we can say that at $n=1000$ the height is a difference of about 7, or the RBT would have a height $60\%$ of that of a BST.
+
+\subsubsection{Takeaway Figure 2}
+\figureInsetScaled{images/experiment1/Figure_2.png}{Test on Similar Valued Insertions}{0.5}
+
+Looking at the results here, we see that very quickly, the height of the BST explodes. This is most likely due to the fact that we are consistently choosing the minimum or the maximum number in the range, and growing the tree from the ends. 
+
+This makes sense when we look at the height compared to the average values. Within this test, our $k$ value to be inserted was from 0 to 10. Thus, the chance that either the minimum and maximum were chosen as the $k$ value is 2/11.
+
+Here, I define the maximum or minimum path of the tree as the path following ONLY the left child (minimum path) or right child (maximum path). I define these terms as if we follow our path, the last node is guaranteed to be the smallest or largest value in the tree (allowing for duplicates).
+
+When we insert the minimum value (0), when the path length of the minimum path is the tree's height, we then must increase the size of the tree, as this final node is defined to have no children. Same follows for the maximum and maximum path.
+
+It is good to assume that the height of the tree is determined by the maximum number of either the minimum or maximum values in the tree, because adding them must increase the minimum or maximum path.
+
+Thus, Seeing as we have 2 paths, we should expect the height of this BST to be half of the percentage that either the maximum or minimum is chosen as $k$.
+
+Thus, $2/11 * 1/2 * n$ = $n/11 \approx 1.11n$ 
+
+Looking at our graph, we see that after 1000 insertions, the height of our BST is approximately 120, which lines up with our prediction.
+
+Our RBT however, has no such pitfalls. After our insertions, we rotate the minimum/maximum paths such that insertions are not guaranteed to increase the height of the tree, explaining why our height stays so low.
+
+At this point, the difference between the height of the two trees approaches the height of the BST.
+
+\subsubsection{Takeaway Figure 3}
+\figureInsetScaled{images/experiment1/Figure_3.png}{Test on Binary Valued Insertions}{0.5}
+
+These results are similar to the result of Figure 2.
+
+In fact, we can draw upon our conclusion from Figure 2, but here the chance of inserting the minimum or maximum value is exactly $100\%$.
+
+Thus, we expect our height to be $1/1 * 1/2 * n = 1/2n \approx .5n$ As here $n$ is 1000, we should expect to see our BST height at 500, which we do.
+
+Again, our RBT has no such expanding from the edges problem, so it's height is extremely low when compared to that of our BST.
+
+At this point, the difference between the height of the two trees approaches the height of the BST.
+
+\subsubsection{Takeaway Figure 4}
+\figureInsetScaled{images/experiment1/Figure_4.png}{Test on Uniquely Valued Insertions on Small Tree}{0.5}
+
+These results are similar to the result of Figure 1, but we get a higher definition view of the smaller list sizes.
+
+At the final data point $n=50$, we say that the BST has a height of $\approx12$. The RBT has a height of $\approx 7$. Then, we can say that at $n=50$ the height is a difference of about 5, or the RBT would have a height $58\%$ of that of a BST.
+
+As we can see, just like before, the RBT out performs the BST.
+
+\subsubsection{Final Takeaway}
+
+At both $n=50$ and $n=1000$, (in trials 1 and 4), the RBT appears to have a height of $60\%$ that of the BST. This is, however, the best case for the BST. If the BST is NOT given it's best/average case, we see that it's height grows much faster than that of a RBT.
+
+Then, we can say that a RBT will, empirically, in general, have a height that is $< \approx 60\%$ that of a BST.
+
+Therefor, looking at the cases we have been given, we conclude that there is almost no need to have a BST, as a RBT out performs it in every scenario provided. The only scenario that a BST may be preferable is when the tree size is small and the performance increase does not warrant actually implementing a RBT.
+
+%% ------------------------------------------------------------------------------------------ %%
+\newpage
+\subsection{Experiment 2}
+
+\subsubsection{Outline}
+
+Like in Experiment 1, We trial based on the height of the tree, but now we keep the number of insertions constant.
+
+We define our test, \textit{Height Test}. We take in 4 values.
+\begin{itemize}
+    \item $z$, the number of trials to perform per data point.
+    \item $n$, the number of insertions to be done per tree.
+    \item $X$ A range of swaps to be performed.
+\end{itemize}
+
+The process of the test is as follows:
+
+\begin{enumerate}
+    \item Initialize an Empty RBT and BST.
+    \item Generate a sorted list $L$ of size $n$.
+    \item Perform $x$ swaps in the list, where $x \in X$.
+    \item Perform insertions of the values in $L$ into the RBT and BST, in the same order.
+    \item Take note of the height of both the RBT and the BST.
+    \item Average the results of the heights over the $z$ trials per data point $x$.
+\end{enumerate}
+
+Finally, we define the actual tests we performed.
+\begin{enumerate}
+    \item A Height Test, where $z=1, n=10000$ and $X$ starts from 0, goes to $n$, skipping every 250.
+    
+    \item A Height Test, where $z=10, n=10000$ and $X$ starts at 250, goes to $2n$, skipping every 250.
+
+    \item A Height Test, where $z=3, n=10000$ and $X$ starts from 0, goes to $250$, skipping every $5^{th}$ node count.
+\end{enumerate}
+
+\subsubsection{Take Away Test 1}
+\figureInsetScaled{images/experiment2/Figure_1.png}{}{0.5}
+
+The idea of this trial is to get a basic understanding of how they behave, on average.
+
+What we can see from Figure 5 is that right away, the height of the BST is exactly 10000, which is our $n$ value for this test. This is because inserting a sorted list into a binary search tree effectively creates a linked list structure; every insertion is larger than the previous, meaning it is always placed into the right child of the bottom node. This means that our height of our tree is exactly the length of the list.
+
+Our RBT has no such issue, staying extremely low due to our branch rotation.
+
+What this means is that the Difference sticks very closely to the height of the BST.
+
+\subsubsection{Results Test 2}
+\figureInsetScaled{images/experiment2/Figure_2.png}{}{0.5}
+
+As we have already seen the worst case in Figure 5, for this test we start with 250 swaps. This way, we don't have to see the large data point at x=0 which causes the range of the y axis to be extremely large.
+
+In this test, we expand the number of swaps to see how random swaps 
+
+After $n$ random swaps, we are effectively guaranteed a random list, so we expand this range to see if the number of swaps after this range has any affect on the height of the tree.
+
+What we see is that it doesn't-- after we have successfully `fully' randomized the list, no more swaps cause any change.
+
+We see once again that the difference sticks very closely to the height of the BST.
+
+\subsubsection{Results Test 3}
+\figureInsetScaled{images/experiment2/Figure_3.png}{}{0.5}
+
+As in Test 2, we removed the interaction of the worst case for BST to make it easier to see the rest of the graph, here we ONLY include the worst case test to see the difference between them.
+
+This test then, is just a zoomed in version of between the first two data points (x=0 and x=250) in Figure 5.
+
+As we see in Figure 7, the Height of the BST very quickly drops down to somewhat `reasonable' levels (much closer to the RBT), while the RBT stays quite low the entire time. 
+
+And again, the difference sticks very closely to the height of the BST.
+
+\subsubsection{Final Takeaway}
+
+Because we perform swaps in the list, and we perform the insertions into a tree based on the order of the list, we are testing the effect of the order of insertions on the height of a tree. Because all we do is swap, all of our insertion lists are permutations of one another.
+
+We also note that after completing n swaps, we effectively are performing the same tests as in Experiment 1, with truly unique values. We can verify this by performing another test and seeing the difference in height.
+
+We can see that throughout the entire experiment, that the height of the RBT is effectively constant. This means that the height of a Red Black Tree is invariant on the order of insertions.
+
+However, as we see in Figure 5 and 7, the order of the insertions can have a large effect on the height of the tree.
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\newpage
+\section{Part Two}
+\subsection{Experiment 3}
+
+\subsubsection{Outline}
+
+First, we define the function \verb|get_height()|.
+
+\begin{itemize}
+    \item Initialize a height counter at 1. This is because the height of a node MUST be one.
+    \item Loop through all children. Set our height counter to be the max of either our current height counter, or the height of my child node + 1. (+1 for myself, again).
+    \item return the height of the node.
+\end{itemize}
+
+This is a recursive definition, and we run it on the root node to get the Height of the entire tree.
+
+After defining the XC3 Trees with degrees 0 through 25 and looking at the height of the trees, we are given these results.
+
+\figureInsetScaled{images/experiment3/Figure_1.png}{Height of XC3 At Different Degrees}{0.65}
+
+As we can see, we step up in height after every second node.
+
+As we start at height of 1 at a degree of 0, we then go straight away to height 2 at degree 1. We can also see that at degree 3 we go up to height of 3.
+
+Thus, every time we increment from an even degree to an odd degree we increase the height.
+
+Thus, we can say our equation for the height of the tree is 
+\\
+{
+\Large
+\begin{center}
+    $h(i) = \lfloor \frac{i+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+Where $i$ is the degree of the tree.
+
+The reasons for this behaviour become clear when we draw out the degree of each tree.
+
+
+These rules from the definition of the XC3 is important to recite here:
+
+\begin{itemize}
+    \item Each child of the root node of an XC3-Tree is also an XC3-Tree.
+    \item The ith child of the root node of an XC3-Tree has degree (i-2) if i > 2. Otherwise it has degree 0.
+\end{itemize}
+
+\subsubsection{XC3 Tree Height Increase Explanation}
+
+\figureInsetScaled{images/experiment3/points.png}{XC3 Trees of Degrees 0 - 5}{0.65}
+
+Some properties we can also see looking at this diagram
+\begin{itemize}
+    \item A Degree $i$ is `shared' or `contained' in a degree $i+1$ tree. That is, each tree is built off the previous degree.
+\end{itemize}
+
+When we build our tree, we start at degree 0. It must have no children. However, as we use in our definition and diagram in the assignment, we see that we must use a node, somewhere. As every tree is built with degree 0 trees, A degree 0 tree must contain at least one node, thus having height one.
+
+At Degree $i=1$, we see that we must now increase the height of the tree.
+
+At Degree $i=2$, We add another node. Because we add a second child, it must also have degree 0, thus the height of our tree does not increase.
+
+However, at degree $i=3$, we now add a child where it's `local' i is $>2$. Thus, we now take $i-2 = 1$. Because of rule 1, we see we must add a valid XC3 tree of degree 1. A tree of degree one has it's own child node, which increases our tree's height.
+
+At degree $i=4$, we must now also add a child of degree $2$. However, A Degree 2 XC3-Tree has the same height as a degree 1 XC3 Tree, which means our Degree 4 tree does not increase in height, but rather fills out the bottom layer.
+
+\subsubsection{XC3 Tree Height Increase Reword}
+
+We can repeat this pattern on forever. At the root of the cause is this: an Odd degree tree will contain, at some point, a degree 1 descendant$^{*}$, without a matching degree 2 descendant in the same generation$^{*}$. 
+
+When we add another degree, this tree is repeated, but with the addition of the degree 2 node on the same generation- causing no height change.
+
+And when we repeat this again, we would append a degree 3 node, which then has a degree 1 child.
+
+This is, in effect, a recursive definition.
+
+This property of having a single descendant at the bottom of it's ith node descendants is the reason why an XC3-Tree increases in height every other node.
+
+------------------------------------------------------
+
+{
+\small
+I hesitate to use the word grandchild as some node could be many `layers' deep, not necessarily the child of the child. I use the word generation to stick with the `family' relation terminology.
+}
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\newpage
+\subsection{Experiment 4}
+
+\subsubsection{Number of Nodes}
+
+Here we outline a recursive function to counting the number of nodes of any XC3 tree.
+
+As a node with degree $i$ will have $i$ children, we can count the degrees of every node and sum them up.
+
+The process is as follows:
+\begin{enumerate}
+    \item Keep a count at some node. Set count = 1.
+    \item Iterate over the children of node $k$, calling their \verb|count()| function. Add this count to count.
+    \item Return the sum the counts.
+\end{enumerate}
+
+We call this function on the root node, which then does bottom up recursion to hit every node.
+
+The results are as follows.
+
+\figureInsetScaled{images/experiment4/Figure_1.png}{Number of Nodes in XC3 Trees of Degrees 0 - 25}{0.65}
+
+We can't tell much, but due to the scale of the y axis we can be sure that this function grows at least at an exponential rate.
+
+Instead, we can display each of the data points.
+
+\figureInsetScaled{images/experiment4/points.png}{Tuples of XC3 Degree vs XC3 Node Count}{0.65}
+
+What we can clearly see here is that our nodes follow the pattern of the Fibonacci Sequence.
+
+
+\subsubsection{Number of Nodes Equation Naive}
+
+Thus, a naive approach to our equation for calculating the height of our tree would be.
+\\
+{
+\Large
+\begin{center}
+    $nodes_{bad}(i) = nodes_{bad}(i-2) + nodes_{bad}(i-1)$\\
+    $ $\\
+    $nodes_{bad}(0) = 1$\\
+    $nodes_{bad}(1) = 2$\\
+    $ $
+\end{center}
+}
+Where $i$ is the degree of the tree.
+
+We have to shift our Fibonacci Number sequence down however, because at x:1 we get the number 2, when normally we would get 1. Thus, we need to redefine x:0 and x:1 for this to hold.
+
+I called this a naive approach because this method is not very effective at letting us understand the nature of this function's growth.
+
+\subsubsection{Number of Nodes Equation Real}
+
+As stated above, this function looks like it grows at an exponential rate. What we can do to determine if this is true is by determining the ratio of one Fibonacci number to the next. If the ratio remains the same (or converges quickly, we can say it matches follows that exponential base.
+
+The motivation of this would be $2^x$, for example. $2^{i+1} / 2^{i} = 2$, for any $i$.
+
+Thus, performing the ratio of the calculated node counts (which IS the Fibonacci sequence, without the first one) above
+
+\begin{itemize}
+    \item $2 / 1 = 2$
+    \item $3 / 2 = 1.5$
+    \item $5 / 3 \approx 1.667$
+    \item $8 / 5 \approx 1.6$
+    \item $13 / 8 \approx 1.625$
+    \item $21 / 13 \approx 1.611$
+    \item $34 / 21 \approx 1.619$
+    \item $55 / 34 \approx 1.617$
+    \item $89 / 55 \approx 1.618$
+\end{itemize}
+
+In fact, as we continue to do this, the ratio very quickly converges onto the value $1.618033...$, or, the golden ratio $\varphi$.
+
+Thus, we have anecdotally shown that our sequence follows the exponential function with $\varphi$ as its base.
+
+In other words, the $n$th Fibonacci Number can be approximated as $\varphi^{n}$. As we use integers, it would be smart to round it, so we perform $\lceil \varphi^{n} \rfloor$.
+
+$\lceil \varphi^{n} \rfloor$ is a good approximation, but it isn't 100\% correct. However, after finding a resource online, we can fix this in-correction by adding a scale factor to our exponential, $5^{-1/2}$. This produces the equation
+
+{
+\Large
+\begin{center}
+    $\lceil \frac{\varphi^{n}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+Which correctly produces the nth Fibonacci Number, for some given integer n.
+
+However, as our Fibonacci sequence is one removed, we must modify it slightly by shifting the $n$ value over. Therefor, our final function for calculating the height of our tree:
+
+
+{
+\Large
+\begin{center}
+    $nodes(i) = \lceil \frac{\varphi^{i+2}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+Which correctly produces the number of nodes in a given XC3 with degree $i$.
+
+
+\subsubsection{Number of Nodes Equation Explanation}
+
+The reason as to WHY our XC3 Tree node count follows the Fibonacci sequence is easily explainable.
+
+When we construct a tree of degree $i$, we can first start off with a tree of $i-1$. It is easy to see that, at this point, our tree has $nodes(i-1)$.
+
+
+We need to add one more child to the root node to increase this tree's degree to $i$.
+
+However, this new node is supposed to have degree $i-2$, by the rules of the XC3 Tree. In other words, instead of adding just a single node, we need to add an entire XC3 tree of degree $i-2$. This means, in reality, we are adding $nodes(i-2)$ nodes.
+
+This makes it easy to see that $nodes(i) = nodes(i-1) + nodes(i-2)$, because that is how we constructed the tree.
+
+The rules of a degree 0 having no children also makes sense, as having a degree 0 would only add one (the base case of our Fibonacci sequence).
+
+%%% ------------------------------------------------------------------------------------------------------- %%%
+\subsection{Height of Tree Complexity}
+
+We write an argument for why the height of our tree is $O($log$(n))$, where $n$ is the number of nodes in the tree.
+
+As we have shown in Experiment 4, The number of nodes $n$ in an XC3 Tree is
+{
+\begin{center}
+    $n = \lceil \frac{\varphi^{i+2}}{\sqrt{5}} \rfloor$.\\
+    $ $
+\end{center}
+}
+
+However, when using Big-O Notation, we can simplify this Equation heavilty.
+
+Using Big-O notation, it can be shown that these properties preserve the functions order.
+\begin{itemize}
+    \item Rounding/Flooring/Ceiling
+    \item Left-Right Shift
+    \item Scaling
+\end{itemize}
+
+The motivation for this is that for any changes to these features, there still exists a constant $c$ that for some value $k$, all $x > k$, $f(x) \leq cg(x)$.
+
+If we remove all of these features from our $node(i)$ function, we see that it is on the order of $O(\varphi^i)$.
+
+This function describes  the node count $n$ for a certain degree $i$. Thus, it stands to reason that the inverse of this function would describe the degree $i$ for any node count $n$.
+
+The inverse of this function would be $i = $log$_{\varphi}(n)$.
+
+As we have shown in experiment 3, The height of an XC3 tree is
+{
+\begin{center}
+    $h(i) = \lfloor \frac{i+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+Where $i$ is the degree of the tree.
+
+If we want to apply this formula to our degree formula, we can.
+We simply switch for n with our inverse function.
+{
+\begin{center}
+    $h(n) = \lfloor \frac{log_{\varphi}(n)+3}{2} \rfloor$\\
+    $ $
+\end{center}
+}
+And, just as above, if we remove the scaling, the shifts and the the rounding, we are left with an order of 
+    \begin{center}
+    $O($log$_{\varphi}(n))$.
+    \end{center}
+Thus, the order of getting the height of a tree with $n$ nodes is that of $O($log$_{\varphi}(n))$.
+
+However, we are writing an argument for why the height is $O($log$(n))$, not $O($log$_{\varphi}(n))$.
+
+But we can show that these two functions are of the same order.
+
+We use the change of base formula to transform log$_{\varphi}(n)$ to log$_{b}(n)$, for any base $b$.
+
+\begin{center}
+    = log$_{\varphi}(n)$\\
+    = log$_{b}(n) / $log$_{b}(\varphi)$\\
+    = $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$\\
+\end{center}
+
+As $b$ and $\varphi$ are constant values, $\frac{1}{log_{b}(\varphi)}$ must also be a constant value coefficient.
+
+Thus, We have O(g(n), where g(n) = log$_{\varphi}(n)$. As g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, and We also have O(g(n)), and these two sets are equivalent. 
+
+However, as shown, we have a constant value coefficient-- we can remove the scaling just as before to preserve order and get O(log$_{b}(n)$). Notice this works for any base $b$.
+
+Thus, $O(log_{a}(n)) = O(log_{b}(n)$, for any two bases $a, b$. This is why we simply write $O(log(n))$, the base doesn't matter from an order perspective.
+
+Therefor, the order of getting the height of an XC3 tree with $n$ nodes is that of $O($log$_{\varphi}(n))$ = $O($log$(n))$.
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\section{Executive Summary}
+
+From Part 1, We learn that, due to the self balancing of Red Black Trees, they are better to use in effectively every case than a regular BST.
+
+From Part 2, We learn the Order of the Fibonacci sequence is that of O($\varphi^{n}$), and the reason why there is no base included in the term O(log(n)), they all mean the same thing. 
+
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+%% ------------------------------------------------------------------------------------------ %%
+
+\newpage
+\section{Appendix}
+
+Each experiment can be found in it's own experiment python file. 
+
+Example, find Experiment 1's code and tests in \verb|experiment1.py|.
+
+The actual tests are found under the \verb|if __name__ == "__main__":| lines.
+
+The data structures are found in the included \verb|bst.py| and \verb|XC3.py|. We also have an included a custom API to help us plot our graphs found in \verb|plotting.py|.
+
+\end{document}

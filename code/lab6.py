@@ -241,12 +241,12 @@ if (__name__ == '__main__'):
     t = RBTree()
     insertions = [0, 1, 8447, 3, 8]
 
-for insertion in insertions:
+    for insertion in insertions:
 
-    if (insertion == insertions[-1]):
-        hi = 0
-    t.insert(insertion)
+        if (insertion == insertions[-1]):
+            hi = 0
+        t.insert(insertion)
 
-    print(t)
+        print(t)
 
 pass
