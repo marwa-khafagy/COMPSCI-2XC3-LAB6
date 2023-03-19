@@ -532,7 +532,7 @@ We use the change of base formula to transform log$_{\varphi}(n)$ to log$_{b}(n)
 
 As $b$ and $\varphi$ are constant values, $\frac{1}{log_{b}(\varphi)}$ must also be a constant value coefficient.
 
-Thus, We have O(g(n)), where g(n) = log$_{\varphi}(n)$. As g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, and We also have O(g(n)), and these two sets are equivalent. 
+Thus, We have O(g(n)), where g(n) = log$_{\varphi}(n)$ (AKA, O(log$_{\varphi}(n)$)). However, as g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, that must mean that we also have that O(g(n)) = O($\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$).
 
 However, as shown, we have a constant value coefficient-- we can remove the scaling just as before to preserve order and get O(log$_{b}(n)$). Notice this works for any base $b$.
 
