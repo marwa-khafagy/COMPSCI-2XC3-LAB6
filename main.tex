@@ -138,7 +138,7 @@ It is good to assume that the height of the tree is determined by the maximum nu
 
 Thus, Seeing as we have 2 paths, we should expect the height of this BST to be half of the percentage that either the maximum or minimum is chosen as $k$.
 
-Thus, $2/11 * 1/2 * n$ = $n/11 \approx 1.11n$ 
+Thus, $\frac{2}{11} \cdot \frac{1}{2} \cdot n$ = $\frac{n}{11} \approx 1.11n$ 
 
 Looking at our graph, we see that after 1000 insertions, the height of our BST is approximately 120, which lines up with our prediction.
 
@@ -153,7 +153,7 @@ These results are similar to the result of Figure 2.
 
 In fact, we can draw upon our conclusion from Figure 2, but here the chance of inserting the minimum or maximum value is exactly $100\%$.
 
-Thus, we expect our height to be $1/1 * 1/2 * n = 1/2n \approx .5n$ As here $n$ is 1000, we should expect to see our BST height at 500, which we do.
+Thus, we expect our height to be $\frac{1}{1} \cdot \frac{1}{2} \cdot n = \frac{1}{2n} \approx .5n$ As here $n$ is 1000, we should expect to see our BST height at 500, which we do.
 
 Again, our RBT has no such expanding from the edges problem, so it's height is extremely low when compared to that of our BST.
 
@@ -174,7 +174,7 @@ At both $n=50$ and $n=1000$, (in trials 1 and 4), the RBT appears to have a heig
 
 Then, we can say that a RBT will, empirically, in general, have a height that is $< \approx 60\%$ that of a BST.
 
-Therefor, looking at the cases we have been given, we conclude that there is almost no need to have a BST, as a RBT out performs it in every scenario provided. The only scenario that a BST may be preferable is when the tree size is small and the performance increase does not warrant actually implementing a RBT.
+Therefore, looking at the cases we have been given, we conclude that there is almost no need to have a BST, as a RBT out performs it in every scenario provided. The only scenario that a BST may be preferable is when the tree size is small and the performance increase does not warrant actually implementing a RBT.
 
 %% ------------------------------------------------------------------------------------------ %%
 \newpage
@@ -188,7 +188,7 @@ We define our test, \textit{Height Test}. We take in 4 values.
 \begin{itemize}
     \item $z$, the number of trials to perform per data point.
     \item $n$, the number of insertions to be done per tree.
-    \item $X$ A range of swaps to be performed.
+    \item $X$, A range of swaps to be performed.
 \end{itemize}
 
 The process of the test is as follows:
@@ -242,7 +242,7 @@ As in Test 2, we removed the interaction of the worst case for BST to make it ea
 
 This test then, is just a zoomed in version of between the first two data points (x=0 and x=250) in Figure 5.
 
-As we see in Figure 7, the Height of the BST very quickly drops down to somewhat `reasonable' levels (much closer to the RBT), while the RBT stays quite low the entire time. 
+As we see in Figure 7, the height of the BST very quickly drops down to somewhat `reasonable' levels (much closer to the RBT), while the RBT stays quite low the entire time. 
 
 And again, the difference sticks very closely to the height of the BST.
 
@@ -304,7 +304,7 @@ These rules from the definition of the XC3 is important to recite here:
 
 \begin{itemize}
     \item Each child of the root node of an XC3-Tree is also an XC3-Tree.
-    \item The ith child of the root node of an XC3-Tree has degree (i-2) if i > 2. Otherwise it has degree 0.
+    \item The ith child of the root node of an XC3-Tree has degree (i-2) if i $>$ 2. Otherwise it has degree 0.
 \end{itemize}
 
 \subsubsection{XC3 Tree Height Increase Explanation}
@@ -437,7 +437,7 @@ $\lceil \varphi^{n} \rfloor$ is a good approximation, but it isn't 100\% correct
 }
 Which correctly produces the nth Fibonacci Number, for some given integer n.
 
-However, as our Fibonacci sequence is one removed, we must modify it slightly by shifting the $n$ value over. Therefor, our final function for calculating the height of our tree:
+However, as our Fibonacci sequence is one removed, we must modify it slightly by shifting the $n$ value over. Therefore, our final function for calculating the height of our tree:
 
 
 {
@@ -447,7 +447,7 @@ However, as our Fibonacci sequence is one removed, we must modify it slightly by
     $ $
 \end{center}
 }
-Which correctly produces the number of nodes in a given XC3 with degree $i$.
+Which correctly produces the number of nodes in a given XC3-Tree with degree $i$.
 
 
 \subsubsection{Number of Nodes Equation Explanation}
@@ -532,11 +532,11 @@ We use the change of base formula to transform log$_{\varphi}(n)$ to log$_{b}(n)
 
 As $b$ and $\varphi$ are constant values, $\frac{1}{log_{b}(\varphi)}$ must also be a constant value coefficient.
 
-Thus, We have O(g(n), where g(n) = log$_{\varphi}(n)$. As g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, and We also have O(g(n)), and these two sets are equivalent. 
+Thus, We have O(g(n)), where g(n) = log$_{\varphi}(n)$ (AKA, O(log$_{\varphi}(n)$)). However, as g(n) is equivalent to $\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$, that must mean that we also have that O(g(n)) = O($\frac{1}{log_{b}(\varphi)}$log$_{b}(n)$).
 
 However, as shown, we have a constant value coefficient-- we can remove the scaling just as before to preserve order and get O(log$_{b}(n)$). Notice this works for any base $b$.
 
-Thus, $O(log_{a}(n)) = O(log_{b}(n)$, for any two bases $a, b$. This is why we simply write $O(log(n))$, the base doesn't matter from an order perspective.
+Thus, $O(log_{a}(n)) = O(log_{b}(n))$, for any two bases $a, b$. This is why we simply write $O(log(n))$, the base doesn't matter from an order perspective.
 
 Therefore, the order of getting the height of an XC3 tree with $n$ nodes is that of $O($log$_{\varphi}(n))$ = $O($log$(n))$.
 
@@ -563,6 +563,6 @@ Example, find Experiment 1's code and tests in \verb|experiment1.py|.
 
 The actual tests are found under the \verb|if __name__ == "__main__":| lines.
 
-The data structures are found in the included \verb|bst.py| and \verb|XC3.py|. We also have an included a custom API to help us plot our graphs found in \verb|plotting.py|.
+The data structures are found in the included \verb|bst.py| and \verb|XC3.py|. We also have included a custom API to help us plot our graphs found in \verb|plotting.py|.
 
 \end{document}
