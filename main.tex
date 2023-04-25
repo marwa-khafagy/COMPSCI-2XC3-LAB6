@@ -227,7 +227,7 @@ What this means is that the Difference sticks very closely to the height of the 
 
 As we have already seen the worst case in Figure 5, for this test we start with 250 swaps. This way, we don't have to see the large data point at x=0 which causes the range of the y axis to be extremely large.
 
-In this test, we expand the number of swaps to see how random swaps 
+In this test, we expand the number of swaps to see how random swaps affect the height of the trees.
 
 After $n$ random swaps, we are effectively guaranteed a random list, so we expand this range to see if the number of swaps after this range has any affect on the height of the tree.
 
@@ -487,7 +487,7 @@ Using Big-O notation, it can be shown that these properties preserve the functio
     \item Scaling
 \end{itemize}
 
-The motivation for this is that for any changes to these features, there still exists a constant $c$ that for some value $k$, all $x > k$, $f(x) \leq cg(x)$.
+The motivation for this is that for any changes to these features, there still exists a constant $c$ that for some value $k$, all $x > k$, $f(x) \leq c \cdot g(x)$.
 
 If we remove all of these features from our $node(i)$ function, we see that it is on the order of $O(\varphi^i)$.
 
@@ -538,7 +538,7 @@ However, as shown, we have a constant value coefficient-- we can remove the scal
 
 Thus, $O(log_{a}(n)) = O(log_{b}(n))$, for any two bases $a, b$. This is why we simply write $O(log(n))$, the base doesn't matter from an order perspective.
 
-Therefor, the order of getting the height of an XC3 tree with $n$ nodes is that of $O($log$_{\varphi}(n))$ = $O($log$(n))$.
+Therefore, the order of getting the height of an XC3 tree with $n$ nodes is that of $O($log$_{\varphi}(n))$ = $O($log$(n))$.
 
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
@@ -548,7 +548,7 @@ Therefor, the order of getting the height of an XC3 tree with $n$ nodes is that 
 
 From Part 1, We learn that, due to the self balancing of Red Black Trees, they are better to use in effectively every case than a regular BST.
 
-From Part 2, We learn the Order of the Fibonacci sequence is that of O($\varphi^{n}$), and the reason why there is no base included in the term O(log(n)), they all mean the same thing. 
+From Part 2, We learn the Order of the Fibonacci sequence is that of O($\varphi^{n}$). Also the reason why there is no base included in the term O(log(n)) is because the base doesn't matter from an order perspective by means of the change of base formula (constant coefficient).
 
 %% ------------------------------------------------------------------------------------------ %%
 %% ------------------------------------------------------------------------------------------ %%
