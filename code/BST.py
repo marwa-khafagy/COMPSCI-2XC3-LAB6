@@ -55,6 +55,15 @@ class BST:
             return "[]"
         return "[" + self.__str_helper(self.root) + "]"
 
+    def find_min(self):
+        return self._find_min(self.root)
+
+    def _find_min(self, node):
+        if (node.left is None):
+            return node
+            
+        return self._find_min(node.left)
+
     def __str_helper(self, node):
         if node.is_leaf():
             return "[" + str(node) + "]"
@@ -65,3 +74,11 @@ class BST:
         return "[" + self.__str_helper(node.left) + " <- " + str(node) + " -> " + self.__str_helper(node.right) + "]"
 
 
+if (__name__ == '__main__'):
+    tree =  BST()
+    tree.insert(5)
+    tree.insert(1)
+    tree.insert(2)
+    tree.insert(12)
+    print(tree)
+    print(tree.find_min())
